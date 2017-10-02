@@ -3,77 +3,111 @@ package es.uvigo.esei.dai.hybridserver.http;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class HTTPResponse {
-	public HTTPResponse() {
-	}
+    private HTTPResponseStatus status;
+    private String version;
+    private String content;
 
-	public HTTPResponseStatus getStatus() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    private Map<String, String> parameters = new LinkedHashMap<>();
 
-	public void setStatus(HTTPResponseStatus status) {
-	}
+    public HTTPResponse() {
+        this.status = null;
+        this.version = null;
 
-	public String getVersion() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    }
 
-	public void setVersion(String version) {
-	}
+    public HTTPResponseStatus getStatus() {
 
-	public String getContent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        return this.status;
+    }
 
-	public void setContent(String content) {
-	}
+    public void setStatus(HTTPResponseStatus status) {
+        this.status = status;
+    }
 
-	public Map<String, String> getParameters() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public String getVersion() {
 
-	public String putParameter(String name, String value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        return this.version;
+    }
 
-	public boolean containsParameter(String name) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public void setVersion(String version) {
 
-	public String removeParameter(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        this.version = version;
+    }
 
-	public void clearParameters() {
-	}
+    public String getContent() {
 
-	public List<String> listParameters() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        return this.content;
+    }
 
-	public void print(Writer writer) throws IOException {
-	}
+    public void setContent(String content) {
 
-	@Override
-	public String toString() {
-		final StringWriter writer = new StringWriter();
+        this.content = content;
+        this.putParameter("Content-Length", Integer.toString(content.length()));
+    }
 
-		try {
-			this.print(writer);
-		} catch (IOException e) {
-		}
+    public Map<String, String> getParameters() {
 
-		return writer.toString();
-	}
+        return this.parameters;
+    }
+
+    public String putParameter(String name, String value) {
+
+        return parameters.putIfAbsent(name, value);
+    }
+
+    public boolean containsParameter(String name) {
+
+        return parameters.containsKey(name);
+    }
+
+    public String removeParameter(String name) {
+
+        return parameters.remove(name);
+    }
+
+    public void clearParameters() {
+        parameters.clear();
+    }
+
+    public List<String> listParameters() {
+
+        return (List<String>) parameters.values();
+    }
+
+    public void print(Writer writer) throws IOException {
+
+        writer.write(this.getVersion());
+        writer.append(' ');
+        writer.write(Integer.toString(this.getStatus().getCode()));
+        writer.append(' ');
+        writer.write(this.getStatus().getStatus());
+        writer.append("\r\n");
+        if (!(this.parameters.isEmpty())) {
+            for (Map.Entry<String, String> cabecera : this.parameters.entrySet()) {
+                writer.write(cabecera.getKey() + ": " + cabecera.getValue());
+            }
+            writer.append("\r\n");
+        }
+        writer.append("\r\n");
+        if (this.content != null) {
+            writer.write(this.getContent());
+        }
+    }
+
+    @Override
+    public String toString() {
+        final StringWriter writer = new StringWriter();
+
+        try {
+            this.print(writer);
+        } catch (IOException e) {
+        }
+
+        return writer.toString();
+    }
 }

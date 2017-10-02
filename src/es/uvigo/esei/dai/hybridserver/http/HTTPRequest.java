@@ -1,10 +1,12 @@
 package es.uvigo.esei.dai.hybridserver.http;
 
 import com.google.common.base.Splitter;
+import org.apache.http.protocol.HTTP;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -13,166 +15,178 @@ import java.util.Map;
 
 public class HTTPRequest {
 
+    //request line
     private HTTPRequestMethod method;
     private String resourceChain;
     private String httpVersion;
-
     private String resourceName;
     private String[] resourcePath = {};
-    private Map<String, String> resourceParameters = new LinkedHashMap<>();
 
-
+    //headers parameters
     private Map<String, String> headersParameters = new LinkedHashMap<>();
     private int contentLenght;
     private String content;
+
+    //resource parameters
+    private Map<String, String> resourceParameters = new LinkedHashMap<>();
+
     private BufferedReader input;
 
     public HTTPRequest(Reader reader) throws IOException, HTTPParseException {
 
         try {
-            String line;
-            input = new BufferedReader(reader);
 
+            String line;
+
+            input = new BufferedReader(reader);
             parseRequestLine(input.readLine());
 
-            if (getMethod() == HTTPRequestMethod.GET) {
+            while (!((line = input.readLine()).equals("")))
+                parseHeaders(line);
 
-                while (!((line = input.readLine()).equals("")))
-                    parseHeaders(line);
-
-                parseResourceParameters();
-
-            }
-
-            if (getMethod() == HTTPRequestMethod.POST) {
-
-                while (!((line = input.readLine()).equals("")))
-                    parseHeaders(line);
-
+            if (getContentLength() > 0) {
                 content = input.readLine();
                 checkContentType();
-                parseResourceParameters();
-
-
             }
-        } catch (Exception e) {
-        }
 
-    }
-
-    public void checkContentType() {
-        try {
-
-            String type = headersParameters.get("Content-Type");
-
-            if (type != null && type.startsWith("application/x-www-form-urlencoded"))
-                content = URLDecoder.decode(content, "UTF-8");
+            parseResourceParameters();
 
         } catch (Exception e) {
+            throw new HTTPParseException("ERROR DURING THE PARSE");
         }
-
     }
+
 
     public void parseRequestLine(String requestLine) {
 
-        try {
+        String[] aux = requestLine.split(" ");
 
-            List<String> token1 = Splitter.on(" ").trimResults().splitToList(requestLine);
-            List<String> token2 = Splitter.onPattern("[?|&]").omitEmptyStrings().splitToList(token1.get(1));
+        if (aux.length > 2) {
 
-            method = HTTPRequestMethod.valueOf(token1.get(0));
-            resourceChain = token1.get(1);
-            httpVersion = token1.get(2);
-            resourceName = token2.get(0).substring(1);
+            method = HTTPRequestMethod.valueOf(aux[0]);
+            resourceChain = aux[1];
+            httpVersion = aux[2];
+            resourceName = aux[1].split("\\?")[0].substring(1);
             resourcePath = parsePath(resourceName);
+        }
 
-        } catch (Exception e) {
+
+    }
+
+    public void parseHeaders(String headers) {
+
+        String[] kv = headers.split(":");
+
+        if (kv.length > 1)
+            headersParameters.put(kv[0], kv[1].trim());
+
+        if ((headersParameters.get("Content-Length")) != null)
+            contentLenght = Integer.parseInt(headersParameters.get("Content-Length"));
+        else
+            contentLenght = 0;
+    }
+
+
+    public void checkContentType() throws UnsupportedEncodingException {
+
+        String type;
+
+        if ((headersParameters.get("Content-Type")) != null) {
+            type = headersParameters.get("Content-Type");
+
+            if (type.startsWith("application/x-www-form-urlencoded"))
+                content = URLDecoder.decode(content, "UTF-8");
         }
     }
 
     public void parseResourceParameters() {
 
-        try {
+        String[] s_resourceParameters_array = {}, token1, token2;
 
-            List<String> token1 = Splitter.on("?").trimResults().splitToList(resourceChain);
-            List<String> token2 = Splitter.on("&").trimResults().splitToList(token1.get(1));
+        if (contentLenght == 0) {
+            token1 = resourceChain.split("\\?");
 
-            Iterator<String> it = token2.iterator();
+            if (token1.length > 1) {
+                token2 = token1[1].split("&");
 
-            while (it.hasNext()) {
-                List<String> token5 = Splitter.on("=").trimResults().splitToList(it.next());
-                resourceParameters.put(token5.get(0), token5.get(1));
+                if (token2.length > 1)
+                    s_resourceParameters_array = token2;
             }
 
-        } catch (Exception e) {
-        }
-    }
+        } else {
 
-    public void parseHeaders(String headers) {
+            token2 = content.split("&");
 
-        try {
-            String[] kv = headers.split(":");
-            headersParameters.put(kv[0], kv[1].trim());
-
-            if (getMethod() == HTTPRequestMethod.POST)
-                contentLenght = Integer.parseInt(headersParameters.get("Content-Length"));
+            if (token2.length > 1)
+                s_resourceParameters_array = token2;
             else
-                contentLenght = 0;
-        } catch (Exception e) {
+                s_resourceParameters_array = token2;
+
+        }
+
+
+        for (int i = 0; i < s_resourceParameters_array.length; i++) {
+
+            String[] kv = s_resourceParameters_array[i].split("=");
+
+            if (kv.length > 1)
+                resourceParameters.put(kv[0], kv[1]);
         }
     }
+
 
     public String[] parsePath(String path) {
 
-        String[] toret = {};
-        if (!path.isEmpty())
-            toret = path.split("/");
+        String[] toRet = {};
 
-        return toret;
+        if (!path.isEmpty())
+            toRet = path.split("/");
+
+        return toRet;
     }
 
     public HTTPRequestMethod getMethod() {
-        // TODO Auto-generated method stub
+
         return method;
     }
 
     public String getResourceChain() {
-        // TODO Auto-generated method stub
+
         return resourceChain;
     }
 
     public String[] getResourcePath() {
-        // TODO Auto-generated method stub
+
         return resourcePath;
     }
 
     public String getResourceName() {
-        // TODO Auto-generated method stub
+
         return resourceName;
     }
 
     public Map<String, String> getResourceParameters() {
-        // TODO Auto-generated method stub
+
         return resourceParameters;
     }
 
     public String getHttpVersion() {
-        // TODO Auto-generated method stub
+
         return httpVersion;
     }
 
     public Map<String, String> getHeaderParameters() {
-        // TODO Auto-generated method stub
+
         return headersParameters;
     }
 
     public String getContent() {
-        // TODO Auto-generated method stub
+
         return content;
     }
 
     public int getContentLength() {
-        // TODO Auto-generated method stub
+
         return contentLenght;
     }
 
