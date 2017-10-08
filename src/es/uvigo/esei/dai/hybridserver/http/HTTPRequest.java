@@ -45,7 +45,9 @@ public class HTTPRequest {
                 parseHeaders(line);
 
             if (getContentLength() > 0) {
-                content = input.readLine();
+                char[] contentArray = new char[getContentLength()];
+                input.read(contentArray);
+                content = new String(contentArray);
                 checkContentType();
             }
 
@@ -117,9 +119,7 @@ public class HTTPRequest {
 
             token2 = content.split("&");
 
-            if (token2.length > 1)
-                s_resourceParameters_array = token2;
-            else
+            if (token2.length >= 1)
                 s_resourceParameters_array = token2;
 
         }

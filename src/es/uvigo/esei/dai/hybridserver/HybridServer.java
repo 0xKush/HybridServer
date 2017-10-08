@@ -1,11 +1,5 @@
 package es.uvigo.esei.dai.hybridserver;
 
-import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
-import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
-import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
-import es.uvigo.esei.dai.hybridserver.http.ServiceThread;
-import org.apache.http.HttpVersion;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,12 +12,14 @@ public class HybridServer {
     private static final int NUM_CLIENTS = 50;
     private Thread serverThread;
     private boolean stop;
+    private Map<String, String> pages;
 
     public HybridServer() {
 
     }
 
     public HybridServer(Map<String, String> pages) {
+        this.pages = pages;
 
     }
 

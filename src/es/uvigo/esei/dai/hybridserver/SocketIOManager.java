@@ -6,6 +6,15 @@ import java.net.Socket;
 
 public class SocketIOManager implements IOManager {
     private final Socket socket;
+
+    public BufferedReader getReader() {
+        return reader;
+    }
+
+    public PrintWriter getWriter() {
+        return writer;
+    }
+
     private final BufferedReader reader;
     private final PrintWriter writer;
 
