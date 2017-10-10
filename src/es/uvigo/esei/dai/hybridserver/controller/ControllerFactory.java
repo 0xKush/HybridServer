@@ -4,9 +4,8 @@ import es.uvigo.esei.dai.hybridserver.model.entity.Document;
 
 import java.util.List;
 
-public interface HTMLController {
-    public Document get(String uuid);
+public interface ControllerFactory {
+    Document get(String uuid);
 
-    public List<Document> list();
+    List<Document> list();
 }
-

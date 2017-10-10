@@ -1,5 +1,10 @@
 package es.uvigo.esei.dai.hybridserver;
 
+import es.uvigo.esei.dai.hybridserver.controller.ControllerFactory;
+import es.uvigo.esei.dai.hybridserver.controller.MapControllerFactory;
+import es.uvigo.esei.dai.hybridserver.model.dao.HTMLDAO;
+import es.uvigo.esei.dai.hybridserver.model.dao.HTMLMapDAO;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -8,7 +13,7 @@ import java.util.Properties;
 import java.util.concurrent.*;
 
 public class HybridServer {
-    private static final int SERVICE_PORT = 8888;
+    private static final int SERVICE_PORT = 12345;
     private static final int NUM_CLIENTS = 50;
     private Thread serverThread;
     private boolean stop;
@@ -20,7 +25,6 @@ public class HybridServer {
 
     public HybridServer(Map<String, String> pages) {
         this.pages = pages;
-
     }
 
     public HybridServer(Properties properties) {
@@ -45,7 +49,10 @@ public class HybridServer {
                         if (stop)
                             break;
 
-                        threadPool.execute(new ServiceThread(socket));
+                        HTMLDAO dao = new HTMLMapDAO(pages);
+                        ControllerFactory controller = new MapControllerFactory(dao);
+
+                        threadPool.execute(new ServiceThread(socket, controller));
 
                     }
                 } catch (IOException e) {

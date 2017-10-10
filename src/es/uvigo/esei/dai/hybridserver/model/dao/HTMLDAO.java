@@ -6,6 +6,6 @@ import java.util.List;
 
 
 public interface HTMLDAO {
-    public Document get(String uuid);
-    public List<Document> list();
+    Document get(String uuid);
+    List<Document> list();
 }

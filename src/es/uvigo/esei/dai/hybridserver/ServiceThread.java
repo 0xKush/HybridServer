@@ -3,19 +3,20 @@ package es.uvigo.esei.dai.hybridserver;
 import java.io.IOException;
 import java.net.Socket;
 
-import es.uvigo.esei.dai.hybridserver.SocketIOManager;
-import es.uvigo.esei.dai.hybridserver.controller.DefaultHTMLController;
-import es.uvigo.esei.dai.hybridserver.controller.HTMLController;
+import es.uvigo.esei.dai.hybridserver.controller.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.http.*;
-import es.uvigo.esei.dai.hybridserver.model.entity.Document;
+import es.uvigo.esei.dai.hybridserver.model.entity.HTMLManager;
+import es.uvigo.esei.dai.hybridserver.model.entity.ResourceManager;
 
 public class ServiceThread implements Runnable {
     private final Socket socket;
     private HTTPRequest request;
     private HTTPResponse response;
+    private ControllerFactory controller;
 
-    public ServiceThread(Socket clientSocket) throws IOException {
+    public ServiceThread(Socket clientSocket, ControllerFactory controller) throws IOException {
         this.socket = clientSocket;
+        this.controller = controller;
     }
 
     @Override
@@ -23,37 +24,21 @@ public class ServiceThread implements Runnable {
         try (Socket socket = this.socket) {
 
             SocketIOManager ioManager = new SocketIOManager(socket);
-
-            //Receive request & filter by uuid
-            HTMLController htmlController = new DefaultHTMLController();
             request = new HTTPRequest(ioManager.getReader());
+            String resource = "", method = "";
 
-            if (!request.getResourceParameters().isEmpty()) {
+            resource = request.getResourceName();
+            method = request.getMethod().toString();
 
-                String uuid = request.getResourceParameters().get("uuid");
-                Document page = htmlController.get(uuid);
-
-                response = new HTTPResponse();
-
-
-
-            } else {
-
+            switch (resource) {
+                case "":
+                case "html":
+                    ResourceManager manager = new HTMLManager();
+                    response = manager.createResponse(resource, method);
+                    break;
+                default:
+                    break;
             }
-
-
-
-
-
-
-            /*
-            HTTPResponse response = new HTTPResponse();
-            response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
-            response.setStatus(HTTPResponseStatus.S200);
-            response.setContent("Hybrid Server + \n Cristopher Álvarez Martínez");
-
-            ioManager.println(response.toString());
-            */
 
 
         } catch (IOException | HTTPParseException e) {
