@@ -8,7 +8,7 @@ public class HTMLMapDAO implements HTMLDAO {
     private Map<String, String> pages;
 
     public HTMLMapDAO(Map<String, String> pages) {
-        this.pages = new HashMap<>();
+        this.pages = pages;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class HTMLMapDAO implements HTMLDAO {
 
         while (it.hasNext()) {
             key = it.next();
-            documentList.add(new Document(key.toString(), pages.get(key.toString())));
+            documentList.add(new Document(key, pages.get(key)));
         }
 
 

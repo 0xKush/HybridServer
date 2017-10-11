@@ -9,18 +9,6 @@ public class Document {
         this.content = content;
     }
 
-    public Document() {
-
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
     public String getContent() {
         return content;
     }
@@ -29,27 +17,42 @@ public class Document {
         this.content = content;
     }
 
-    public String emptyResource() {
-
-        String toret = new StringBuilder()
-                .append("<html>\n").append(" <head>\n")
-                .append(" <title>Hybrid Server</title>\n")
-                .append(" </head>\n")
-                .append(" <body>\n")
-                .append(" <h1>Welcome to Hybrid Server</h1>\n")
-                .append(" <h3> Authors:</h3>\n")
-                .append(" <h2>Cristopher</h2>\n")
-                .append(" <h2>Alberto</h2>\n")
-                .append(" </body>\n")
-                .append("</html>\n").toString();
-
-        return toret;
-    }
-
     public String toString() {
-        return "Document{" +
-                "uuid='" + uuid + '\'' +
-                ", content='" + content + '\'' +
-                '}';
+        StringBuilder toRet = new StringBuilder();
+
+        // Si la peticion viene vacia
+        if (content.equals("") && uuid.equals("")) {
+            toRet.append("<html>\n").append(" <head>\n")
+                    .append(" <title>Hybrid Server</title>\n")
+                    .append(" </head>\n")
+                    .append(" <body>\n")
+                    .append(" <h1>Welcome to Hybrid Server</h1>\n")
+                    .append(" <h3> Authors:</h3>\n")
+                    .append(" <h2>Cristopher</h2>\n")
+                    .append(" <h2>Alberto</h2>\n")
+                    .append(" </body>\n")
+                    .append("</html>\n").toString();
+
+            //Si la peticion
+        } else if (uuid.equals("")) {
+            toRet.append("<html>\n").append(" <head>\n")
+                    .append(" <title>Hybrid Server</title>\n")
+                    .append(" </head>\n")
+                    .append(" <body>\n")
+                    .append(content)
+                    .append(" </body>\n")
+                    .append("</html>\n").toString();
+
+        } else {
+            toRet.append("<html>\n").append(" <head>\n")
+                    .append(" <title>Hybrid Server</title>\n")
+                    .append(" </head>\n")
+                    .append(" <body>\n")
+                    .append(uuid + ":" + content + "\n")
+                    .append(" </body>\n")
+                    .append("</html>\n").toString();
+        }
+
+        return toRet.toString();
     }
 }

@@ -18,6 +18,7 @@ public class HybridServer {
     private Thread serverThread;
     private boolean stop;
     private Map<String, String> pages;
+    private ControllerFactory factory;
 
     public HybridServer() {
 
@@ -49,10 +50,8 @@ public class HybridServer {
                         if (stop)
                             break;
 
-                        HTMLDAO dao = new HTMLMapDAO(pages);
-                        ControllerFactory controller = new MapControllerFactory(dao);
-
-                        threadPool.execute(new ServiceThread(socket, controller));
+                        factory = new MapControllerFactory(pages);
+                        threadPool.execute(new ServiceThread(socket, factory));
 
                     }
                 } catch (IOException e) {

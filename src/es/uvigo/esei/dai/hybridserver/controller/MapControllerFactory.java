@@ -1,23 +1,18 @@
 package es.uvigo.esei.dai.hybridserver.controller;
 
-import es.uvigo.esei.dai.hybridserver.model.dao.HTMLDAO;
-import es.uvigo.esei.dai.hybridserver.model.entity.Document;
-import java.util.List;
+import es.uvigo.esei.dai.hybridserver.model.dao.HTMLMapDAO;
+
+import java.util.Map;
 
 public class MapControllerFactory implements ControllerFactory {
-    private HTMLDAO dao;
+    private Map<String, String> pages;
 
-    public MapControllerFactory(HTMLDAO dao) {
-        this.dao = dao;
+    public MapControllerFactory(Map<String, String> pages) {
+        this.pages = pages;
     }
 
-    public Document get(String uuid) {
-        return dao.get(uuid);
+    @Override
+    public HTMLController createHtmlController() {
+        return new HTMLController(new HTMLMapDAO(pages));
     }
-
-    public List<Document> list() {
-        return dao.list();
-    }
-
-
 }

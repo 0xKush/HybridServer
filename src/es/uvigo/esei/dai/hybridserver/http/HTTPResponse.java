@@ -97,6 +97,7 @@ public class HTTPResponse {
         if (this.content != null) {
             writer.write(this.getContent());
         }
+        writer.flush();
     }
 
     @Override
