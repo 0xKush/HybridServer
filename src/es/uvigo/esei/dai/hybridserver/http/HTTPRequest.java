@@ -113,6 +113,8 @@ public class HTTPRequest {
 
                 if (token2.length > 1)
                     s_resourceParameters_array = token2;
+                else
+                    s_resourceParameters_array = token1;
             }
 
         } else {
@@ -121,6 +123,7 @@ public class HTTPRequest {
 
             if (token2.length >= 1)
                 s_resourceParameters_array = token2;
+
 
         }
 

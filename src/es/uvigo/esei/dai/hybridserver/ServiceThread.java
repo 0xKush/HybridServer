@@ -7,6 +7,7 @@ import java.util.Map;
 import es.uvigo.esei.dai.hybridserver.controller.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.http.*;
 import es.uvigo.esei.dai.hybridserver.model.entity.HTMLManager;
+import es.uvigo.esei.dai.hybridserver.utils.SocketIOManager;
 
 public class ServiceThread implements Runnable {
     private final Socket socket;
@@ -18,11 +19,14 @@ public class ServiceThread implements Runnable {
     public ServiceThread(Socket clientSocket, ControllerFactory factory) throws IOException {
         this.socket = clientSocket;
         this.factory = factory;
+        this.htmlManager = new HTMLManager();
     }
 
     @Override
     public void run() {
         try (Socket socket = this.socket) {
+
+
 
             SocketIOManager ioManager = new SocketIOManager(socket);
             request = new HTTPRequest(ioManager.getReader());
@@ -35,20 +39,23 @@ public class ServiceThread implements Runnable {
 
             switch (resource) {
                 case "":
-                case "html":
-                    htmlManager = new HTMLManager();
-                    response = htmlManager.createResponse(factory, resource, method, resourceParameters);
+                    response = htmlManager.responseForRoot();
                     response.print(ioManager.getWriter());
                     break;
-                default:
-                    htmlManager = new HTMLManager();
-                    response = htmlManager.createResponse(factory, resource, method, resourceParameters);
-                    response.print(ioManager.getWriter());
 
+                case "html":
+                    response = htmlManager.responseForHTML(factory, method, resourceParameters);
+                    response.print(ioManager.getWriter());
+                    break;
+
+                default:
+                    response = htmlManager.responseForInvalidResource();
+                    response.print(ioManager.getWriter());
+                    break;
             }
 
 
-        } catch (IOException | HTTPParseException e) {
+        } catch (IOException | HTTPParseException | NullPointerException e) {
             e.printStackTrace();
         }
     }

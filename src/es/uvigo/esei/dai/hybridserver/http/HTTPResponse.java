@@ -79,7 +79,7 @@ public class HTTPResponse {
         return (List<String>) parameters.values();
     }
 
-    public void print(Writer writer) throws IOException {
+    public void print(Writer writer) throws IOException, NullPointerException {
 
         writer.write(this.getVersion());
         writer.append(' ');

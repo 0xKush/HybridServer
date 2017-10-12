@@ -134,12 +134,7 @@ public class ClientRequetsTest extends HybridServerTestCase {
 	
 	
 	// Ejercicio 5
-	@Test
-	public void testGetInvalidHtmlPage() throws IOException {
-		final String pageURL = url + "html?uuid=" + invalidUUID;
 
-		assertThat(getStatus(pageURL), is(equalTo(404)));
-	}
 	
 	@Test
 	public void testGetInvalidResource() throws IOException {
