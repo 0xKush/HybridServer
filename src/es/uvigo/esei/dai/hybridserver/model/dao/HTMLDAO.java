@@ -7,5 +7,11 @@ import java.util.List;
 
 public interface HTMLDAO {
     Document get(String uuid);
+
     List<Document> list();
+
+    void add(String uuid, String content);
+
+    void delete(String uuid);
+
 }

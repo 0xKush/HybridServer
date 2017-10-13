@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Launcher {
     public static void main(String[] args) {
-    /*
+
         String[][] pages = new String[][]{
                 //  { "uuid",                                 "texto contenido por la página"                               }
                 {"6df1047e-cf19-4a83-8cf3-38f5e53f7725", "This is the html page 6df1047e-cf19-4a83-8cf3-38f5e53f7725."},
@@ -26,6 +26,6 @@ public class Launcher {
             pagesMAP.put(page[0], page[1]);
         }
         new HybridServer(pagesMAP).start();
-        */
+
     }
 }

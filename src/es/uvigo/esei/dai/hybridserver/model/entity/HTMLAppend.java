@@ -7,9 +7,9 @@ public class HTMLAppend {
 
         StringBuilder toRet = new StringBuilder();
 
-        toRet.append(" <h2> Authors: </h2>\n")
-                .append(" <h1> Cristopher </h1>")
-                .append(" <h1> Alberto</h1> \n");
+        toRet.append(" <h2> Authors: </h2>")
+                .append(" <h3> Cristopher </h3>")
+                .append(" <h3> Alberto</h3>");
 
         return toRet.toString();
     }
@@ -52,20 +52,25 @@ public class HTMLAppend {
         toRet.append(setHeader())
                 .append("\n")
                 .append(s)
-                .append("\n")
                 .append(setFooter());
 
         return toRet.toString();
     }
 
-    public static String setListItem(Document d) {
+    public static String setPageList(Document d) {
         StringBuilder toRet = new StringBuilder();
 
         toRet.append("<li>\n")
-                .append("<a href=\"localhost:12345/html?uuid=" + d.getUuid() + "\">")
-                .append(d.getUuid())
-                .append("</a>\n")
+                .append("<a href=\"html?uuid=" + d.getUuid() + "\">" + d.getUuid() + "</a>")
                 .append("</li>\n");
+
+        return toRet.toString();
+    }
+
+    public static String setPage(Document d) {
+        StringBuilder toRet = new StringBuilder();
+
+        toRet.append("<a href=\"html?uuid=" + d.getUuid() + "\">" + d.getUuid() + "</a>");
 
         return toRet.toString();
     }

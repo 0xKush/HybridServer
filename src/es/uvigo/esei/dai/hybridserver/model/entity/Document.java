@@ -64,7 +64,7 @@ public class Document {
     @Override
     public String toString() {
         StringBuilder toRet = new StringBuilder();
-        toRet.append(getContent() + "\n");
+        toRet.append(getContent());
         return toRet.toString();
     }
 

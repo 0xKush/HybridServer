@@ -49,7 +49,7 @@ public class ServiceThread implements Runnable {
                     break;
 
                 default:
-                    response = htmlManager.responseForInvalidResource();
+                    response = htmlManager.responseForInvalidResource("404 - Bad Request");
                     response.print(ioManager.getWriter());
                     break;
             }

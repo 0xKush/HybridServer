@@ -2,6 +2,7 @@ package es.uvigo.esei.dai.hybridserver.controller;
 
 import es.uvigo.esei.dai.hybridserver.model.dao.HTMLDAO;
 import es.uvigo.esei.dai.hybridserver.model.entity.Document;
+
 import java.util.List;
 
 public class HTMLController {
@@ -19,5 +20,12 @@ public class HTMLController {
         return dao.list();
     }
 
+    public void add(String uuid, String content) {
+        dao.add(uuid, content);
+    }
+
+    public void delete(String uuid) {
+        dao.delete(uuid);
+    }
 
 }
