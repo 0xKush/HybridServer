@@ -2,8 +2,9 @@ package es.uvigo.esei.dai.hybridserver.model.dao;
 
 import es.uvigo.esei.dai.hybridserver.model.entity.Document;
 
-
+import java.sql.DriverManager;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -19,86 +20,94 @@ public class HTMLDBDAO implements HTMLDAO {
 
     }
 
+    public Connection connect() {
+
+        try {
+            return DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     @Override
     public Document get(String uuid) {
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        Document doc = null;
 
-            try (PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM HTML WHERE uuid=?")) {
-                statement.setString(1, uuid);
-                ResultSet result = statement.executeQuery();
+        try (PreparedStatement statement = connect().prepareStatement(
+                "SELECT * FROM HTML WHERE uuid = ?")) {
+            statement.setString(1, uuid);
 
+            try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
-                    Document doc = new Document(result.getString("id"), result.getString("content"));
-                    return doc;
-                } else {
-                    throw new RuntimeException("Error recuperando la página");
+                    doc = new Document(result.getString("uuid"), result.getString("content"));
                 }
+            } catch (SQLException e) {
+                //throw new RuntimeException("Error recuperando la página");
+                e.printStackTrace();
             }
-
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error recuperando la página" + e.getMessage());
         }
+        return doc;
+    }
+
+    @Override
+    public void add(String uuid, String content) {
+
+        try (PreparedStatement statement = connect().prepareStatement(
+                "INSERT INTO HTML (uuid,content) VALUES (?,?)")) {
+            statement.setString(1, uuid);
+            statement.setString(2, content);
+
+            int rows = statement.executeUpdate();
+
+            if (rows != 1)
+                throw new RuntimeException("Error insertando página");
+        } catch (SQLException e) {
+            throw new RuntimeException("Error insertando página" + e.getMessage());
+        }
+    }
+
+
+    @Override
+    public void delete(String uuid) {
+
+        try (PreparedStatement statement = connect().prepareStatement(
+                "DELETE FROM HTML WHERE uuid = ?")) {
+            statement.setString(1, uuid);
+
+            int rows = statement.executeUpdate();
+
+            if (rows != 1)
+                throw new RuntimeException("Error eliminando página");
+        } catch (SQLException e) {
+            throw new RuntimeException("Error eliminando página" + e.getMessage());
+        }
+
     }
 
     @Override
     public List<Document> list() {
 
-        final List<Document> doc_list = this.list();
+        List<Document> documentList = new ArrayList<>();
 
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Statement statement = connect().createStatement()) {
 
-            try (Statement statement = connection.createStatement()) {
+            try (ResultSet result = statement.executeQuery("SELECT uuid,content FROM HTML")) {
 
-                try (ResultSet result = statement.executeQuery("SELECT * FROM HTML")) {
-
-                    while (result.next()) {
-                        Document doc = new Document(result.getString("id"), result.getString("content"));
-                        doc_list.add(doc);
-                    }
-
-                    return doc_list;
+                while (result.next()) {
+                    Document doc = new Document(result.getString("uuid"), result.getString("content"));
+                    documentList.add(doc);
                 }
+
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error recuperando lista de páginas");
+
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error recuperando lista de páginas" + e.getMessage());
         }
+        return documentList;
     }
-
-    @Override
-    public void add(String uuid, String content) {
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-
-            try (PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO HTML (uuid,content) VALUES (?,?)")) {
-                statement.setString(1, uuid);
-                statement.setString(1, uuid);
-
-                int rows = statement.executeUpdate();
-
-                if (rows != 1) {
-                    throw new RuntimeException("Error insertando empleado");
-                }
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    @Override
-    public void delete(String uuid) {
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-
 }

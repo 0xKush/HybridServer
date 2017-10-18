@@ -27,7 +27,6 @@ public class ServiceThread implements Runnable {
         try (Socket socket = this.socket) {
 
 
-
             SocketIOManager ioManager = new SocketIOManager(socket);
             request = new HTTPRequest(ioManager.getReader());
             response = new HTTPResponse();

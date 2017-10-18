@@ -1,11 +1,44 @@
 package es.uvigo.esei.dai.hybridserver;
 
+import es.uvigo.esei.dai.hybridserver.utils.Tools;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+
 
 public class Launcher {
     public static void main(String[] args) {
 
+        Properties config = new Properties();
+        InputStream input;
+        
+        try {
+            if (args.length == 0)
+                new HybridServer();
+
+            if (args.length == 1) {
+
+                input = new FileInputStream(args[0]);
+                config.load(input);
+                new HybridServer(config);
+
+            } else
+                Tools.info("Invalid params");
+
+        } catch (IOException e) {
+            Tools.error(e);
+        }
+    }
+}
+
+
+
+
+        /*
         String[][] pages = new String[][]{
                 //  { "uuid",                                 "texto contenido por la página"                               }
                 {"6df1047e-cf19-4a83-8cf3-38f5e53f7725", "This is the html page 6df1047e-cf19-4a83-8cf3-38f5e53f7725."},
@@ -26,6 +59,4 @@ public class Launcher {
             pagesMAP.put(page[0], page[1]);
         }
         new HybridServer(pagesMAP).start();
-
-    }
-}
+*/
