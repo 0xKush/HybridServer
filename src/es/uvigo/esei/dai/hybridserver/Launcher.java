@@ -13,22 +13,27 @@ import java.util.Properties;
 public class Launcher {
     public static void main(String[] args) {
 
-        Properties config = new Properties();
-        InputStream input;
-        
         try {
-            if (args.length == 0)
-                new HybridServer();
+            HybridServer server = null;
 
-            if (args.length == 1) {
+            if (args.length == 0) {
+                server = new HybridServer();
+            } else if (args.length == 1) {
+
+                Properties config = new Properties();
+                InputStream input;
 
                 input = new FileInputStream(args[0]);
                 config.load(input);
-                new HybridServer(config);
 
-            } else
-                Tools.info("Invalid params");
+                server = new HybridServer(config);
 
+            } else {
+                Tools.info("Error");
+                System.exit(1);
+            }
+
+            server.start();
         } catch (IOException e) {
             Tools.error(e);
         }

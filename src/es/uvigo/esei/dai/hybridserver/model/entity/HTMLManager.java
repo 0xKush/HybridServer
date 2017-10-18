@@ -28,7 +28,7 @@ public class HTMLManager implements ResourceManager {
             case "DELETE":
                 return responseForDELETE(factory, resourceParameters);
             default:
-                return responseForInvalidResource("404 - Bad Request");
+                return responseForInvalidResource("400 - Bad Request");
         }
     }
 

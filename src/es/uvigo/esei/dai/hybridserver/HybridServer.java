@@ -14,8 +14,8 @@ import java.util.Properties;
 import java.util.concurrent.*;
 
 public class HybridServer {
-    private static int SERVICE_PORT = 12345;
-    private static int NUM_CLIENTS = 50;
+    private int SERVICE_PORT = 12345;
+    private int NUM_CLIENTS = 50;
     private Thread serverThread;
     private boolean stop;
     private ControllerFactory factory;
