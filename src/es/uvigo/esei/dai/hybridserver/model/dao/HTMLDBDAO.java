@@ -42,11 +42,11 @@ public class HTMLDBDAO implements HTMLDAO {
                     doc = new Document(result.getString("uuid"), result.getString("content"));
                 }
             } catch (SQLException e) {
-                //throw new RuntimeException("Error recuperando la página");
-                e.printStackTrace();
+                throw new RuntimeException("The page could not be retrieved.");
+
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error recuperando la página" + e.getMessage());
+            throw new RuntimeException("DB connection error" + e.getMessage());
         }
         return doc;
     }
@@ -62,9 +62,9 @@ public class HTMLDBDAO implements HTMLDAO {
             int rows = statement.executeUpdate();
 
             if (rows != 1)
-                throw new RuntimeException("Error insertando página");
+                throw new RuntimeException("The page could not be added.");
         } catch (SQLException e) {
-            throw new RuntimeException("Error insertando página" + e.getMessage());
+            throw new RuntimeException("DB connection error" + e.getMessage());
         }
     }
 
@@ -79,9 +79,9 @@ public class HTMLDBDAO implements HTMLDAO {
             int rows = statement.executeUpdate();
 
             if (rows != 1)
-                throw new RuntimeException("Error eliminando página");
+                throw new RuntimeException("The page could not be deleted.");
         } catch (SQLException e) {
-            throw new RuntimeException("Error eliminando página" + e.getMessage());
+            throw new RuntimeException("DB connection error" + e.getMessage());
         }
 
     }
@@ -101,12 +101,11 @@ public class HTMLDBDAO implements HTMLDAO {
                 }
 
             } catch (SQLException e) {
-                throw new RuntimeException("Error recuperando lista de páginas");
-
+                throw new RuntimeException("The pages could not be retrieved.");
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error recuperando lista de páginas" + e.getMessage());
+            throw new RuntimeException("DB connection error" + e.getMessage());
         }
         return documentList;
     }

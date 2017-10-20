@@ -1,16 +1,11 @@
 package es.uvigo.esei.dai.hybridserver.http;
 
-import com.google.common.base.Splitter;
-import org.apache.http.protocol.HTTP;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class HTTPRequest {
@@ -54,7 +49,7 @@ public class HTTPRequest {
             parseResourceParameters();
 
         } catch (Exception e) {
-            throw new HTTPParseException("ERROR DURING THE PARSE");
+            throw new HTTPParseException("Error during the parse");
         }
     }
 

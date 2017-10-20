@@ -7,9 +7,9 @@ public class HTMLAppend {
 
         StringBuilder toRet = new StringBuilder();
 
-        toRet.append(" <h2> Authors: </h2>")
-                .append(" <h3> Cristopher </h3>")
-                .append(" <h3> Alberto</h3>");
+        toRet.append(" <h2> Grupo de proyecto 1.3</h2>")
+                .append(" <h3> Cristopher Álvarez Martínez </h3>")
+                .append(" <h3> Alberto Lopez Rodriguez </h3>");
 
         return toRet.toString();
     }
@@ -28,6 +28,7 @@ public class HTMLAppend {
 
         toRet.append("<html>\n")
                 .append(" <head>\n")
+                .append("<meta charset=\"utf-8\">\n")
                 .append(" <title>Hybrid Server</title>\n")
                 .append(" <h1>Hybrid Server</h1>\n")
                 .append(" </head>\n")

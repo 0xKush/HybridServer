@@ -1,7 +1,5 @@
 package es.uvigo.esei.dai.hybridserver.model.entity;
 
-import es.uvigo.esei.dai.hybridserver.utils.Tools;
-
 public class Document {
     private String uuid;
     private String content;
@@ -35,31 +33,6 @@ public class Document {
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
-
- /*
-    public String toString() {
-        String toRet = null;
-
-        // welcome page
-        if (content.equals("") && uuid.equals("")) {
-            toRet = HTMLAppend.setWelcomePage();
-        }
-
-
-        // bad request
-        if (uuid.equals("")) {
-            Tools.info("error request ");
-            toRet = HTMLAppend.setErrorRequest(content);
-        }
-
-        // pagina o lista de ellas
-        if (!(content.equals("")) && !(uuid.equals(""))) {
-            toRet = HTMLAppend.setDocument(content, uuid);
-        }
-
-        return toRet;
-    }
-    */
 
     @Override
     public String toString() {

@@ -8,6 +8,7 @@ import es.uvigo.esei.dai.hybridserver.controller.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.http.*;
 import es.uvigo.esei.dai.hybridserver.model.entity.HTMLManager;
 import es.uvigo.esei.dai.hybridserver.utils.SocketIOManager;
+import es.uvigo.esei.dai.hybridserver.utils.Tools;
 
 public class ServiceThread implements Runnable {
     private final Socket socket;
@@ -48,14 +49,13 @@ public class ServiceThread implements Runnable {
                     break;
 
                 default:
-                    response = htmlManager.responseForInvalidResource("400 - Bad Request");
+                    response = htmlManager.responseForBadRequest("400 - Bad Request");
                     response.print(ioManager.getWriter());
                     break;
             }
 
-
-        } catch (IOException | HTTPParseException | NullPointerException e) {
-            e.printStackTrace();
+        } catch (HTTPParseException | IOException | RuntimeException e) {
+            Tools.error(e);
         }
     }
 }
