@@ -33,7 +33,7 @@ public class HTMLDBDAO implements HTMLDAO {
     public Document get(String uuid) {
         Document doc = null;
 
-        try (PreparedStatement statement = connect().prepareStatement(
+        try (Connection db = connect(); PreparedStatement statement = db.prepareStatement(
                 "SELECT * FROM HTML WHERE uuid = ?")) {
             statement.setString(1, uuid);
 
@@ -54,7 +54,7 @@ public class HTMLDBDAO implements HTMLDAO {
     @Override
     public void add(String uuid, String content) {
 
-        try (PreparedStatement statement = connect().prepareStatement(
+        try (Connection db = connect(); PreparedStatement statement = db.prepareStatement(
                 "INSERT INTO HTML (uuid,content) VALUES (?,?)")) {
             statement.setString(1, uuid);
             statement.setString(2, content);
@@ -72,7 +72,7 @@ public class HTMLDBDAO implements HTMLDAO {
     @Override
     public void delete(String uuid) {
 
-        try (PreparedStatement statement = connect().prepareStatement(
+        try (Connection db = connect(); PreparedStatement statement = db.prepareStatement(
                 "DELETE FROM HTML WHERE uuid = ?")) {
             statement.setString(1, uuid);
 
@@ -91,7 +91,7 @@ public class HTMLDBDAO implements HTMLDAO {
 
         List<Document> documentList = new ArrayList<>();
 
-        try (Statement statement = connect().createStatement()) {
+        try (Connection db = connect(); Statement statement = db.createStatement()) {
 
             try (ResultSet result = statement.executeQuery("SELECT uuid,content FROM HTML")) {
 

@@ -5,6 +5,7 @@ import es.uvigo.esei.dai.hybridserver.controller.DBControllerFactory;
 import es.uvigo.esei.dai.hybridserver.controller.MapControllerFactory;
 import es.uvigo.esei.dai.hybridserver.model.dao.HTMLDAO;
 import es.uvigo.esei.dai.hybridserver.model.dao.HTMLMapDAO;
+import es.uvigo.esei.dai.hybridserver.utils.Tools;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -17,6 +18,7 @@ public class HybridServer {
     private int SERVICE_PORT = 12345;
     private int NUM_CLIENTS = 50;
     private Thread serverThread;
+    private ExecutorService threadPool;
     private boolean stop;
     private ControllerFactory factory;
 
@@ -41,12 +43,15 @@ public class HybridServer {
     }
 
     public void start() {
+        Tools.info("PORT: " + SERVICE_PORT);
+        Tools.info("NUM_CLIENTS: " + NUM_CLIENTS);
+
         this.serverThread = new Thread() {
             @Override
             public void run() {
                 try (final ServerSocket serverSocket = new ServerSocket(SERVICE_PORT)) {
 
-                    ExecutorService threadPool = Executors.newFixedThreadPool(NUM_CLIENTS);
+                    threadPool = Executors.newFixedThreadPool(NUM_CLIENTS);
 
                     while (true) {
 
@@ -77,7 +82,12 @@ public class HybridServer {
         }
 
         try {
+
             this.serverThread.join();
+
+            if (this.threadPool.awaitTermination(10, TimeUnit.SECONDS))
+                this.threadPool.shutdownNow();
+
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

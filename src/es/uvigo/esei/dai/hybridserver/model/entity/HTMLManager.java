@@ -41,6 +41,7 @@ public class HTMLManager {
 
 
     public HTTPResponse responseForRoot() {
+        //Tools.info("Response for root");
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
@@ -195,7 +196,7 @@ public class HTMLManager {
         return response;
     }
 
-    private HTTPResponse responseForInternalServerError(String content) {
+    public HTTPResponse responseForInternalServerError(String content) {
         //Tools.info("S500(Internal Server Error)");
 
         HTTPResponse response = new HTTPResponse();
