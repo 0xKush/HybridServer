@@ -48,6 +48,7 @@ public class HTMLManager {
 
 
         response.setStatus(HTTPResponseStatus.S200);
+        response.putParameter("Content-Type", "text/html");
         response.setContent(setHTML(new Document().toString(true)));
 
         return response;
@@ -81,6 +82,7 @@ public class HTMLManager {
                 //Tools.info("S200(OK)");
 
                 response.setStatus(HTTPResponseStatus.S200);
+                response.putParameter("Content-Type", "text/html");
                 response.setContent(setHTML(documents.toString()));
 
 
@@ -98,6 +100,7 @@ public class HTMLManager {
                         //Tools.info("S200(OK)");
 
                         response.setStatus(HTTPResponseStatus.S200);
+                        response.putParameter("Content-Type", "text/html");
                         response.setContent(doc.toString());
 
                     } else {
@@ -130,6 +133,7 @@ public class HTMLManager {
 
                     this.htmlController.delete(uuid);
                     response.setStatus(HTTPResponseStatus.S200);
+                    response.putParameter("Content-Type", "text/html");
                     response.setContent("The page has been deleted");
 
                 } else {
@@ -161,8 +165,9 @@ public class HTMLManager {
                 content = resourceParameters.get("html");
                 this.htmlController.add(uuid, content);
 
-                response.setContent(setPage(this.htmlController.get(uuid)));
                 response.setStatus(HTTPResponseStatus.S200);
+                response.putParameter("Content-Type", "text/html");
+                response.setContent(setPage(this.htmlController.get(uuid)));
 
             } else {
                 return responseForBadRequest("400 - Bad Request");
@@ -178,6 +183,7 @@ public class HTMLManager {
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
 
         response.setStatus(HTTPResponseStatus.S400);
+        response.putParameter("Content-Type", "text/html");
         response.setContent(setHTML(new Document(content).toString(true)));
 
         return response;
@@ -191,6 +197,7 @@ public class HTMLManager {
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
 
         response.setStatus(HTTPResponseStatus.S404);
+        response.putParameter("Content-Type", "text/html");
         response.setContent(setHTML(new Document(content).toString(true)));
 
         return response;
@@ -203,6 +210,7 @@ public class HTMLManager {
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
 
         response.setStatus(HTTPResponseStatus.S500);
+        response.putParameter("Content-Type", "text/html");
         response.setContent(setHTML(new Document(content).toString(true)));
 
         return response;
