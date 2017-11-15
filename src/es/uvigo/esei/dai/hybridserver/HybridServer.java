@@ -21,10 +21,16 @@ public class HybridServer {
     private ExecutorService threadPool;
     private boolean stop;
     private ControllerFactory factory;
+    private Configuration config;
 
     public HybridServer() {
 
     }
+
+    public HybridServer(Configuration config) {
+        this.config = config;
+    }
+
 
     public HybridServer(Map<String, String> pages) {
         factory = new MapControllerFactory(pages);
