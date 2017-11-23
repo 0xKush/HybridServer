@@ -3,20 +3,17 @@ package es.uvigo.esei.dai.hybridserver.http;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HTTPResponse {
+
     private HTTPResponseStatus status;
     private String version;
     private String content;
-
-    private Map<String, String> parameters = new LinkedHashMap<>();
+    private Map<String, String> parameters;
 
     public HTTPResponse() {
-        this.status = null;
-        this.version = null;
+        parameters = new HashMap<>();
 
     }
 
@@ -57,7 +54,7 @@ public class HTTPResponse {
 
     public String putParameter(String name, String value) {
 
-        return parameters.putIfAbsent(name, value);
+        return parameters.put(name, value);
     }
 
     public boolean containsParameter(String name) {
@@ -80,23 +77,33 @@ public class HTTPResponse {
     }
 
     public void print(Writer writer) throws IOException, NullPointerException {
-
         writer.write(this.getVersion());
-        writer.append(' ');
-        writer.write(Integer.toString(this.getStatus().getCode()));
-        writer.append(' ');
-        writer.write(this.getStatus().getStatus());
-        writer.append("\r\n");
-        if (!(this.parameters.isEmpty())) {
-            for (Map.Entry<String, String> cabecera : this.parameters.entrySet()) {
-                writer.write(cabecera.getKey() + ": " + cabecera.getValue());
+
+        if (this.getStatus() != null)
+            writer.write(" " + this.getStatus().getCode() + " " + this.getStatus().getStatus());
+
+
+        Iterator<String> it = parameters.keySet().iterator();
+        String aux;
+
+        if (it.hasNext()) {
+            writer.write("\r\n");
+            while (it.hasNext()) {
+                aux = it.next();
+                writer.write(aux + ": " + parameters.get(aux) + "\r\n");
+
+                if (!it.hasNext()) {
+                    writer.write("\r\n");
+                }
             }
-            writer.append("\r\n");
+        } else {
+            writer.write("\r\n\r\n");
         }
-        writer.append("\r\n");
-        if (this.content != null) {
+
+        if (this.getContent() != null) {
             writer.write(this.getContent());
         }
+
         writer.flush();
     }
 

@@ -30,6 +30,6 @@ create table XSD (
 create table XSLT ( 
     uuid char(36), 
     content text,
-    xds char(36)
+    xds char(36),
     primary key (uuid) 
 ) ENGINE=INNODB DEFAULT CHARACTER SET = utf8;
