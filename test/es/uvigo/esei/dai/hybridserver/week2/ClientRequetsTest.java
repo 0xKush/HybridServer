@@ -48,8 +48,9 @@ public class ClientRequetsTest extends HybridServerTestCase {
 	public void setup() {
 		this.invalidUUID = "12345678-abcd-1234-ab12-9876543210ab";
 	}
-	
+	/*
 	@Override
+
 	protected HybridServer createHybridServer() {
 		// El servidor debe tener las siguientes páginas en memoria
 		this.pages = new String[][] {
@@ -72,9 +73,9 @@ public class ClientRequetsTest extends HybridServerTestCase {
 			pages.put(page[0], page[1]);
 		}
 		
-		return new HybridServer(pages);
+		return new HybridServer();
 	}
-	
+	*/
 	// Ejercicio 2
 	@Test
 	public void testGetHtmlPage() throws IOException {

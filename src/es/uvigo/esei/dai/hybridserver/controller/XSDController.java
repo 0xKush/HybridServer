@@ -1,22 +1,23 @@
 package es.uvigo.esei.dai.hybridserver.controller;
 
-import es.uvigo.esei.dai.hybridserver.model.dao.html.HTMLDAO;
-import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
+import es.uvigo.esei.dai.hybridserver.model.dao.xsd.XSDDAO;
+import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
 
 import java.util.List;
 
-public class HTMLController {
-    private HTMLDAO dao;
+public class XSDController {
 
-    public HTMLController(HTMLDAO dao) {
+    private XSDDAO dao;
+
+    public XSDController(XSDDAO dao) {
         this.dao = dao;
     }
 
-    public Document get(String uuid) {
+    public XSD get(String uuid) {
         return dao.get(uuid);
     }
 
-    public List<Document> list() {
+    public List<XSD> list() {
         return dao.list();
     }
 
@@ -27,5 +28,4 @@ public class HTMLController {
     public void delete(String uuid) {
         dao.delete(uuid);
     }
-
 }

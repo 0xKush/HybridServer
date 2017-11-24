@@ -1,16 +1,12 @@
 package es.uvigo.esei.dai.hybridserver;
 
-import es.uvigo.esei.dai.hybridserver.controller.ControllerFactory;
-import es.uvigo.esei.dai.hybridserver.controller.DBControllerFactory;
-import es.uvigo.esei.dai.hybridserver.controller.MapControllerFactory;
-import es.uvigo.esei.dai.hybridserver.model.dao.HTMLDAO;
-import es.uvigo.esei.dai.hybridserver.model.dao.HTMLMapDAO;
+import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
+import es.uvigo.esei.dai.hybridserver.controller.factory.DBControllerFactory;
 import es.uvigo.esei.dai.hybridserver.utils.Tools;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.*;
 
@@ -31,10 +27,6 @@ public class HybridServer {
         this.config = config;
     }
 
-
-    public HybridServer(Map<String, String> pages) {
-        factory = new MapControllerFactory(pages);
-    }
 
     public HybridServer(Properties properties) {
 
@@ -91,13 +83,19 @@ public class HybridServer {
 
             this.serverThread.join();
 
-            if (this.threadPool.awaitTermination(10, TimeUnit.SECONDS))
-                this.threadPool.shutdownNow();
-
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
         this.serverThread = null;
+
+
+        threadPool.shutdownNow();
+
+        try {
+            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
