@@ -55,7 +55,7 @@ public class XSLTDBDAO implements XSLTDAO {
                 "INSERT INTO XSLT (uuid,content,xsd) VALUES (?,?,?)")) {
             statement.setString(1, uuid);
             statement.setString(2, content);
-            statement.setString(2, xsd);
+            statement.setString(3, xsd);
 
             int rows = statement.executeUpdate();
 

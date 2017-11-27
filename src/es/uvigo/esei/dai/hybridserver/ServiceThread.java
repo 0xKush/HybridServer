@@ -31,9 +31,9 @@ public class ServiceThread implements Runnable {
         this.socket = clientSocket;
         this.factory = factory;
         this.HTMLManager = new HTMLManager(factory.createHTMLController());
-        this.XMLManager = new XMLManager(factory.createXMLController());
+        this.XMLManager = new XMLManager(factory.createXMLController(), factory.createXSDController(),factory.createXSLTController());
         this.XSDManager = new XSDManager(factory.createXSDController());
-        this.XSLTManager = new XSLTManager(factory.createXSLTController());
+        this.XSLTManager = new XSLTManager(factory.createXSLTController(), factory.createXSDController());
     }
 
     @Override
