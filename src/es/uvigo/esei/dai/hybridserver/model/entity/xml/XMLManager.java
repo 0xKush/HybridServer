@@ -3,6 +3,7 @@ package es.uvigo.esei.dai.hybridserver.model.entity.xml;
 import es.uvigo.esei.dai.hybridserver.controller.XMLController;
 import es.uvigo.esei.dai.hybridserver.controller.XSDController;
 import es.uvigo.esei.dai.hybridserver.controller.XSLTController;
+import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
@@ -19,10 +20,18 @@ public class XMLManager extends AbstractManager {
     private XSDController xsdController;
     private XSLTController xsltController;
 
-    public XMLManager(XMLController xmlController, XSDController xsdController, XSLTController xsltController) {
-        this.xmlController = xmlController;
-        this.xsdController = xsdController;
-        this.xsltController = xsltController;
+    public XMLManager(ControllerFactory factory) {
+        if (factory != null) {
+            this.xmlController = factory.createXMLController();
+            this.xsdController = factory.createXSDController();
+            this.xsltController = factory.createXSLTController();
+        }
+        else {
+            this.xmlController = null;
+            this.xsdController = null;
+            this.xsltController = null;
+        }
+
     }
 
 

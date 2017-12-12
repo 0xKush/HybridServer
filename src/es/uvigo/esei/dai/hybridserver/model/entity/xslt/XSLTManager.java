@@ -2,6 +2,7 @@ package es.uvigo.esei.dai.hybridserver.model.entity.xslt;
 
 import es.uvigo.esei.dai.hybridserver.controller.XSDController;
 import es.uvigo.esei.dai.hybridserver.controller.XSLTController;
+import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
@@ -18,9 +19,15 @@ public class XSLTManager extends AbstractManager {
     private XSLTController xsltController;
     private XSDController xsdController;
 
-    public XSLTManager(XSLTController xsltController, XSDController xsdController) {
-        this.xsltController = xsltController;
-        this.xsdController = xsdController;
+    public XSLTManager(ControllerFactory factory) {
+        if (factory != null) {
+            this.xsdController = factory.createXSDController();
+            this.xsltController = factory.createXSLTController();
+        } else {
+            this.xsltController = null;
+            this.xsdController = null;
+        }
+
     }
 
 

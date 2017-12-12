@@ -30,10 +30,10 @@ public class ServiceThread implements Runnable {
     public ServiceThread(Socket clientSocket, ControllerFactory factory) throws IOException {
         this.socket = clientSocket;
         this.factory = factory;
-        this.HTMLManager = new HTMLManager(factory.createHTMLController());
-        this.XMLManager = new XMLManager(factory.createXMLController(), factory.createXSDController(),factory.createXSLTController());
-        this.XSDManager = new XSDManager(factory.createXSDController());
-        this.XSLTManager = new XSLTManager(factory.createXSLTController(), factory.createXSDController());
+        this.HTMLManager = new HTMLManager(factory);
+        this.XMLManager = new XMLManager(factory);
+        this.XSDManager = new XSDManager(factory);
+        this.XSLTManager = new XSLTManager(factory);
     }
 
     @Override

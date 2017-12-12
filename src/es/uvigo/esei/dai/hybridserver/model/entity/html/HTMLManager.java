@@ -1,6 +1,7 @@
 package es.uvigo.esei.dai.hybridserver.model.entity.html;
 
 import es.uvigo.esei.dai.hybridserver.controller.HTMLController;
+import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
@@ -17,8 +18,11 @@ public class HTMLManager extends AbstractManager {
 
     private HTMLController htmlController;
 
-    public HTMLManager(HTMLController htmlController) {
-        this.htmlController = htmlController;
+    public HTMLManager(ControllerFactory factory) {
+        if (factory != null)
+            this.htmlController = factory.createHTMLController();
+        else
+            this.htmlController = null;
     }
 
     public HTTPResponse responseForRoot() {

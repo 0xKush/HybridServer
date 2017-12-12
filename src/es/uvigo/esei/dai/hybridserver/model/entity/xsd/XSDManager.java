@@ -1,6 +1,7 @@
 package es.uvigo.esei.dai.hybridserver.model.entity.xsd;
 
 import es.uvigo.esei.dai.hybridserver.controller.XSDController;
+import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
@@ -17,8 +18,11 @@ public class XSDManager extends AbstractManager {
 
     private XSDController xsdController;
 
-    public XSDManager(XSDController xsdController) {
-        this.xsdController = xsdController;
+    public XSDManager(ControllerFactory factory) {
+        if (factory != null)
+            this.xsdController = factory.createXSDController();
+        else
+            this.xsdController = null;
     }
 
 
