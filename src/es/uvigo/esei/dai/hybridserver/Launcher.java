@@ -2,6 +2,7 @@ package es.uvigo.esei.dai.hybridserver;
 
 import es.uvigo.esei.dai.hybridserver.utils.Tools;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,13 +17,18 @@ public class Launcher {
             server = new HybridServer();
 
         } else if (args.length == 1) {
-            
+
             try (InputStream input = new FileInputStream(args[0])) {
+
+                //File xmlFile= new File(args[0]);
+                //XMLConfigurationLoader xmlLoader = new XMLConfigurationLoader();
+                //Configuration config = xmlLoader.load(xmlFile);
+
                 Properties config = new Properties();
                 config.load(input);
                 server = new HybridServer(config);
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Tools.error(e);
                 System.exit(1);
             }

@@ -1,5 +1,7 @@
 package es.uvigo.esei.dai.hybridserver.http;
 
+import es.uvigo.esei.dai.hybridserver.utils.Tools;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -49,6 +51,7 @@ public class HTTPRequest {
             parseResourceParameters();
 
         } catch (Exception e) {
+            e.printStackTrace();
             throw new HTTPParseException("Error during the parse");
         }
     }
@@ -56,6 +59,7 @@ public class HTTPRequest {
 
     public void parseRequestLine(String requestLine) {
 
+        Tools.info(requestLine);
         String[] aux = requestLine.split(" ");
 
         if (aux.length > 2) {
