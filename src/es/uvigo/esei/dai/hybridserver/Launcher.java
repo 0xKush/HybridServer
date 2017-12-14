@@ -19,11 +19,9 @@ public class Launcher {
         } else if (args.length == 1) {
 
             try (InputStream input = new FileInputStream(args[0])) {
-
                 //File xmlFile= new File(args[0]);
                 //XMLConfigurationLoader xmlLoader = new XMLConfigurationLoader();
                 //Configuration config = xmlLoader.load(xmlFile);
-
                 Properties config = new Properties();
                 config.load(input);
                 server = new HybridServer(config);

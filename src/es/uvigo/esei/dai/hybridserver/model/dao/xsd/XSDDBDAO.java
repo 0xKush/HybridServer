@@ -1,5 +1,6 @@
 package es.uvigo.esei.dai.hybridserver.model.dao.xsd;
 
+import es.uvigo.esei.dai.hybridserver.Configuration;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
 
 import java.sql.*;
@@ -11,10 +12,10 @@ public class XSDDBDAO implements XSDDAO {
     String url, user, password;
 
 
-    public XSDDBDAO(Properties properties) {
-        url = properties.getProperty("db.url");
-        user = properties.getProperty("db.user");
-        password = properties.getProperty("db.password");
+    public XSDDBDAO(Configuration config) {
+        url = config.getDbURL();
+        user = config.getDbUser();
+        password = config.getDbPassword();
 
     }
 

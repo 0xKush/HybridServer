@@ -1,4 +1,4 @@
-package es.uvigo.esei.dai.hybridserver.model.entity.xml.dom;
+package es.uvigo.esei.dai.hybridserver.model.entity.xml;
 
 
 import java.io.File;
@@ -15,10 +15,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import es.uvigo.esei.dai.hybridserver.model.entity.xml.SimpleErrorHandler;
+import es.uvigo.esei.dai.hybridserver.model.entity.SimpleErrorHandler;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -74,6 +75,7 @@ public class DOMParsing {
         SchemaFactory schemaFactory =
                 SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Schema schema = schemaFactory.newSchema(new File(schemaPath));
+   
 
         // Construcción del parser del documento. Se establece el esquema y se activa
         // la validación y comprobación de namespaces

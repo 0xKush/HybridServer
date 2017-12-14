@@ -1,6 +1,7 @@
 package es.uvigo.esei.dai.hybridserver.controller.factory;
 
 
+import es.uvigo.esei.dai.hybridserver.Configuration;
 import es.uvigo.esei.dai.hybridserver.controller.HTMLController;
 import es.uvigo.esei.dai.hybridserver.controller.XMLController;
 import es.uvigo.esei.dai.hybridserver.controller.XSDController;
@@ -14,23 +15,23 @@ import java.util.Properties;
 
 public class DBControllerFactory implements ControllerFactory {
 
-    private Properties properties;
+    private Configuration configuration;
 
-    public DBControllerFactory(Properties properties) {
-        this.properties = properties;
+    public DBControllerFactory(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     @Override
     public HTMLController createHTMLController() {
-        return new HTMLController(new HTMLDBDAO(properties));
+        return new HTMLController(new HTMLDBDAO(configuration));
     }
 
     public XMLController createXMLController() {
-        return new XMLController(new XMLDBDAO(properties));
+        return new XMLController(new XMLDBDAO(configuration));
     }
 
-    public XSDController createXSDController() { return new XSDController(new XSDDBDAO(properties)); }
+    public XSDController createXSDController() { return new XSDController(new XSDDBDAO(configuration)); }
 
-    public XSLTController createXSLTController() { return new XSLTController(new XSLTDBDAO(properties)); }
+    public XSLTController createXSLTController() { return new XSLTController(new XSLTDBDAO(configuration)); }
 
 }

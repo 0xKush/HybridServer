@@ -8,6 +8,8 @@ import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
+import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
+import es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLT;
 
 import java.util.Iterator;
 import java.util.List;
@@ -21,17 +23,17 @@ public class XMLManager extends AbstractManager {
     private XSLTController xsltController;
 
     public XMLManager(ControllerFactory factory) {
+
         if (factory != null) {
             this.xmlController = factory.createXMLController();
             this.xsdController = factory.createXSDController();
             this.xsltController = factory.createXSLTController();
-        }
-        else {
+
+        } else {
             this.xmlController = null;
             this.xsdController = null;
             this.xsltController = null;
         }
-
     }
 
 
@@ -99,6 +101,35 @@ public class XMLManager extends AbstractManager {
                     } else {
                         response = responseForNotFound("404 - The XML does not exists");
                     }
+                } else if (resourceParameters.size() == 2 && resourceParameters.containsKey("uuid") && resourceParameters.containsKey("xslt")) {
+
+                    String uuidXML = resourceParameters.get("uuid");
+                    XML xml = xmlController.get(uuidXML);
+
+                    if (xml != null) {
+
+                        String uuidXSLT = resourceParameters.get("xslt");
+                        XSLT xslt = xsltController.get(uuidXSLT);
+
+                        if (xslt != null) {
+
+                            String uuidXSD = xslt.getXsd();
+                            XSD xsd = xsdController.get(uuidXSD);
+
+                            if (xsd != null) {
+
+                            } else {
+                                response = responseForBadRequest("400 - The XSD does not exists");
+                            }
+
+                        } else {
+                            response = responseForNotFound("404 - The XSLT asociated does not exists");
+                        }
+
+                    } else {
+                        response = responseForNotFound("404 - The XML does not exists");
+                    }
+
                 } else {
                     response = responseForNotFound("404 - Not Found");
                 }

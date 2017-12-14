@@ -1,4 +1,4 @@
-package es.uvigo.esei.dai.hybridserver.model.entity.xml;
+package es.uvigo.esei.dai.hybridserver.model.entity;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;

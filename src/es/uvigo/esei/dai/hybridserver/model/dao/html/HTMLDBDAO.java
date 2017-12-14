@@ -1,5 +1,6 @@
 package es.uvigo.esei.dai.hybridserver.model.dao.html;
 
+import es.uvigo.esei.dai.hybridserver.Configuration;
 import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
 
 import java.sql.DriverManager;
@@ -13,10 +14,10 @@ public class HTMLDBDAO implements HTMLDAO {
     String url, user, password;
 
 
-    public HTMLDBDAO(Properties properties) {
-        url = properties.getProperty("db.url");
-        user = properties.getProperty("db.user");
-        password = properties.getProperty("db.password");
+    public HTMLDBDAO(Configuration config) {
+        url = config.getDbURL();
+        user = config.getDbUser();
+        password = config.getDbPassword();
 
     }
 

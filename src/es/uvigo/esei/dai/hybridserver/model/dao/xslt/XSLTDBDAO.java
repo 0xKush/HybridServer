@@ -1,5 +1,6 @@
 package es.uvigo.esei.dai.hybridserver.model.dao.xslt;
 
+import es.uvigo.esei.dai.hybridserver.Configuration;
 import es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLT;
 
 import java.sql.*;
@@ -12,11 +13,10 @@ public class XSLTDBDAO implements XSLTDAO {
     String url, user, password;
 
 
-    public XSLTDBDAO(Properties properties) {
-        url = properties.getProperty("db.url");
-        user = properties.getProperty("db.user");
-        password = properties.getProperty("db.password");
-
+    public XSLTDBDAO(Configuration config) {
+        url = config.getDbURL();
+        user = config.getDbUser();
+        password = config.getDbPassword();
     }
 
     public Connection connect() {

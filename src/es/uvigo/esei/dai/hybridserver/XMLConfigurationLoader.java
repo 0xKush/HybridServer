@@ -25,7 +25,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import es.uvigo.esei.dai.hybridserver.model.entity.xml.dom.DOMParsing;
+import es.uvigo.esei.dai.hybridserver.model.entity.xml.DOMParsing;
 
 public class XMLConfigurationLoader {
     public Configuration load(File xmlFile)

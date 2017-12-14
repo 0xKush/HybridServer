@@ -7,49 +7,66 @@ import es.uvigo.esei.dai.hybridserver.utils.Tools;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.concurrent.*;
 
 public class HybridServer {
-    private int SERVICE_PORT = 12345;
-    private int NUM_CLIENTS = 50;
-    private Thread serverThread;
-    private ExecutorService threadPool;
-    private boolean stop;
+    private int servicePort;
+    private int numClients;
+    private String dbUrl, dbUser, dbPass;
     private ControllerFactory factory;
     private Configuration config;
 
-    public HybridServer() {
+    private Thread serverThread;
+    private ExecutorService threadPool;
+    private boolean stop;
 
+
+    public HybridServer() {
+        servicePort = 12345;
+        numClients = 50;
+        dbUrl = "jdbc:mysql://localhost:3306/hstestdb";
+        dbUser = "hsdb";
+        dbPass = "hsdbpass";
     }
 
     public HybridServer(Configuration config) {
-        this.config = config;
-    }
 
+        factory = new DBControllerFactory(config);
+    }
 
     public HybridServer(Properties properties) {
 
-        SERVICE_PORT = Integer.parseInt(properties.getProperty("port"));
-        NUM_CLIENTS = Integer.parseInt(properties.getProperty("numClients"));
+        servicePort = Integer.parseInt(properties.getProperty("port"));
+        numClients = Integer.parseInt(properties.getProperty("numClients"));
+        dbUrl = properties.getProperty("db.url");
+        dbUser = properties.getProperty("db.user");
+        dbPass = properties.getProperty("db.password");
 
-        factory = new DBControllerFactory(properties);
+        config = new Configuration(servicePort, numClients, null, dbUser, dbPass, dbUrl, new ArrayList<ServerConfiguration>());
+        factory = new DBControllerFactory(config);
     }
 
     public int getPort() {
-        return SERVICE_PORT;
+        return servicePort;
     }
 
     public void start() {
-        Tools.info("PORT: " + SERVICE_PORT);
-        Tools.info("NUM_CLIENTS: " + NUM_CLIENTS);
+        Tools.info("RUNNING" + "\n" +
+                "Port: " + servicePort + "\n" +
+                "numClients: " + numClients + "\n" +
+                "dbUrl: " + dbUrl + "\n" +
+                "dbUser: " + dbUser + "\n" +
+                "dbPass: " + dbPass);
+
 
         this.serverThread = new Thread() {
             @Override
             public void run() {
-                try (final ServerSocket serverSocket = new ServerSocket(SERVICE_PORT)) {
+                try (final ServerSocket serverSocket = new ServerSocket(servicePort)) {
 
-                    threadPool = Executors.newFixedThreadPool(NUM_CLIENTS);
+                    threadPool = Executors.newFixedThreadPool(numClients);
 
                     while (true) {
 
@@ -73,7 +90,7 @@ public class HybridServer {
     public void stop() {
         this.stop = true;
 
-        try (Socket socket = new Socket("localhost", SERVICE_PORT)) {
+        try (Socket socket = new Socket("localhost", servicePort)) {
             // Esta conexión se hace, simplemente, para "despertar" el hilo servidor
         } catch (IOException e) {
             throw new RuntimeException(e);

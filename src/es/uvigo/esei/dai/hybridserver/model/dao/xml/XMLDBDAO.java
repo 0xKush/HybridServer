@@ -1,5 +1,6 @@
 package es.uvigo.esei.dai.hybridserver.model.dao.xml;
 
+import es.uvigo.esei.dai.hybridserver.Configuration;
 import es.uvigo.esei.dai.hybridserver.model.entity.xml.XML;
 
 import java.sql.*;
@@ -13,10 +14,11 @@ public class XMLDBDAO implements XMLDAO {
     String url, user, password;
 
 
-    public XMLDBDAO(Properties properties) {
-        url = properties.getProperty("db.url");
-        user = properties.getProperty("db.user");
-        password = properties.getProperty("db.password");
+    public XMLDBDAO(Configuration config) {
+        url = config.getDbURL();
+        user = config.getDbUser();
+        password = config.getDbPassword();
+
 
     }
 

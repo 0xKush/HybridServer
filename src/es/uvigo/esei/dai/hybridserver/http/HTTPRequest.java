@@ -1,7 +1,5 @@
 package es.uvigo.esei.dai.hybridserver.http;
 
-import es.uvigo.esei.dai.hybridserver.utils.Tools;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -21,7 +19,7 @@ public class HTTPRequest {
 
     //headers parameters
     private Map<String, String> headersParameters = new LinkedHashMap<>();
-    private int contentLenght;
+    private int contentLength;
     private String content;
 
     //resource parameters
@@ -59,7 +57,7 @@ public class HTTPRequest {
 
     public void parseRequestLine(String requestLine) {
 
-        Tools.info(requestLine);
+       // Tools.info(requestLine);
         String[] aux = requestLine.split(" ");
 
         if (aux.length > 2) {
@@ -82,9 +80,9 @@ public class HTTPRequest {
             headersParameters.put(kv[0], kv[1].trim());
 
         if ((headersParameters.get("Content-Length")) != null)
-            contentLenght = Integer.parseInt(headersParameters.get("Content-Length"));
+            contentLength = Integer.parseInt(headersParameters.get("Content-Length"));
         else
-            contentLenght = 0;
+            contentLength = 0;
     }
 
 
@@ -104,7 +102,7 @@ public class HTTPRequest {
 
         String[] s_resourceParameters_array = {}, token1, token2;
 
-        if (contentLenght == 0) {
+        if (contentLength == 0) {
             token1 = resourceChain.split("\\?");
 
             if (token1.length > 1) {
@@ -189,7 +187,7 @@ public class HTTPRequest {
 
     public int getContentLength() {
 
-        return contentLenght;
+        return contentLength;
     }
 
     @Override
