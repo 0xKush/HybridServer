@@ -53,8 +53,8 @@
 		<available classname="es.uvigo.esei.dai.hybridserver.http.HTTPParseException" property="exists.exception" classpathref="project.classpath"/>
 		<available classname="es.uvigo.esei.dai.hybridserver.http.HTTPRequestMethod" property="exists.request.method" classpathref="project.classpath"/>
 		<available classname="es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus" property="exists.response.status" classpathref="project.classpath"/>
-		<available classname="es.uvigo.esei.dai.hybridserver.Configuration" property="exists.configuration" classpathref="project.classpath"/>
-		<available classname="es.uvigo.esei.dai.hybridserver.XMLConfigurationLoader" property="exists.xmlconfigurationloader" classpathref="project.classpath"/>
+		<available classname="es.uvigo.esei.dai.hybridserver.configuration.Configuration" property="exists.configuration" classpathref="project.classpath"/>
+		<available classname="es.uvigo.esei.dai.hybridserver.configuration.XMLConfigurationLoader" property="exists.xmlconfigurationloader" classpathref="project.classpath"/>
 		<available file="configuration.xsd" property="exists.configuration.xsd"/>
 		<available file="configuration.xsl" property="exists.configuration.xslt"/>
 	</target>
@@ -90,12 +90,12 @@
 	</target>
 	
 	<target name="check-configuration" unless="exists.configuration" >
-		<echo message="No se encuentra la clase es.uvigo.esei.dai.hybridserver.Configuration"/>
+		<echo message="No se encuentra la clase es.uvigo.esei.dai.hybridserver.configuration.Configuration"/>
 		<echo message="Por favor, comprueba que esta clase existe y que está en el paquete correcto."/>
 	</target>
 	
 	<target name="check-xmlconfigurationloader" unless="exists.xmlconfigurationloader" >
-		<echo message="No se encuentra la clase es.uvigo.esei.dai.hybridserver.XMLConfigurationLoader"/>
+		<echo message="No se encuentra la clase es.uvigo.esei.dai.hybridserver.configuration.XMLConfigurationLoader"/>
 		<echo message="Por favor, comprueba que esta clase existe y que está en el paquete correcto."/>
 	</target>
 	

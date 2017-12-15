@@ -1,12 +1,11 @@
 package es.uvigo.esei.dai.hybridserver.model.dao.xslt;
 
-import es.uvigo.esei.dai.hybridserver.Configuration;
+import es.uvigo.esei.dai.hybridserver.configuration.Configuration;
 import es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLT;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 public class XSLTDBDAO implements XSLTDAO {
 

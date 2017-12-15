@@ -1,5 +1,7 @@
 package es.uvigo.esei.dai.hybridserver;
 
+import es.uvigo.esei.dai.hybridserver.configuration.Configuration;
+import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.controller.factory.DBControllerFactory;
 import es.uvigo.esei.dai.hybridserver.utils.Tools;
