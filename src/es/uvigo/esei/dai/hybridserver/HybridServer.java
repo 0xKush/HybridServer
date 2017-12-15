@@ -8,13 +8,15 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.*;
 
 public class HybridServer {
     private int servicePort;
     private int numClients;
-    private String dbUrl, dbUser, dbPass;
+    private String dbUrl, dbUser, dbPass, webService;
+    private List<ServerConfiguration> serviceList;
     private ControllerFactory factory;
     private Configuration config;
 
@@ -34,6 +36,14 @@ public class HybridServer {
     public HybridServer(Configuration config) {
 
         factory = new DBControllerFactory(config);
+
+        servicePort = config.getHttpPort();
+        numClients = config.getNumClients();
+        dbUrl = config.getDbURL();
+        dbUser = config.getDbUser();
+        dbPass = config.getDbPassword();
+        webService = config.getWebServiceURL();
+        serviceList = config.getServers();
     }
 
     public HybridServer(Properties properties) {

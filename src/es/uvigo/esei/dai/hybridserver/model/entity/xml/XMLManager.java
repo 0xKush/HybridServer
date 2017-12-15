@@ -10,11 +10,19 @@ import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
 import es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLT;
+import org.xml.sax.SAXException;
 
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static es.uvigo.esei.dai.hybridserver.model.entity.xml.DOMParsing.validateWithXSD;
+import static es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLTUtils.transform;
 
 public class XMLManager extends AbstractManager {
 
@@ -118,16 +126,32 @@ public class XMLManager extends AbstractManager {
 
                             if (xsd != null) {
 
+                                try {
+                                    validateWithXSD(xml, xsd);
+                                    String transformedXML = transform(xml, xslt);
+
+                                    response.setStatus(HTTPResponseStatus.S200);
+                                    response.putParameter("Content-Type", "text/html");
+                                    response.setContent(transformedXML);
+
+                                } catch (ParserConfigurationException | IOException | SAXException e) {
+                                    e.printStackTrace();
+                                    response = responseForBadRequest("400 - The XML could not be validated");
+                                } catch (TransformerException e) {
+                                    e.printStackTrace();
+                                    response = responseForInternalServerError("500 - The XML could not be transformed");
+                                }
+
                             } else {
-                                response = responseForBadRequest("400 - The XSD does not exists");
+                                response = responseForBadRequest("400 - The XSD does not exist");
                             }
 
                         } else {
-                            response = responseForNotFound("404 - The XSLT asociated does not exists");
+                            response = responseForNotFound("404 - The XSLT asociated does not exist");
                         }
 
                     } else {
-                        response = responseForNotFound("404 - The XML does not exists");
+                        response = responseForNotFound("404 - The XML does not exist");
                     }
 
                 } else {
