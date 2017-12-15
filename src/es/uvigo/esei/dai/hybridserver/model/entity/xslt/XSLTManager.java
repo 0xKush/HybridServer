@@ -120,21 +120,24 @@ public class XSLTManager extends AbstractManager {
             response = responseForInternalServerError("500 - Internal Server Error");
         } else {
 
-            if (resourceParameters.containsKey("xslt") && resourceParameters.containsKey("xsd") && ((xsd = this.xsdController.get(resourceParameters.get("xsd"))) != null)) {
+            if (resourceParameters.containsKey("xslt") && resourceParameters.containsKey("xsd")) {
 
-                content = resourceParameters.get("xslt");
+                if ((xsd = this.xsdController.get(resourceParameters.get("xsd"))) != null) {
 
-                this.xsltController.add(uuid, content, xsd.getUuid());
+                    content = resourceParameters.get("xslt");
+                    this.xsltController.add(uuid, content, xsd.getUuid());
 
-                response.setStatus(HTTPResponseStatus.S200);
-                response.putParameter("Content-Type", "text/html");
-                response.setContent("<a href=\"xslt?uuid=" + uuid.toString() + "\">" + uuid.toString() + "</a>");
+                    response.setStatus(HTTPResponseStatus.S200);
+                    response.putParameter("Content-Type", "text/html");
+                    response.setContent("<a href=\"xslt?uuid=" + uuid.toString() + "\">" + uuid.toString() + "</a>");
+
+                } else {
+                    return responseForNotFound("404 - Not Found");
+                }
 
 
-            } else if (!resourceParameters.containsKey("xsd"))
+            } else
                 return responseForBadRequest("400 - Bad Request");
-            else
-                return responseForNotFound("404 - Not Found");
         }
 
         return response;

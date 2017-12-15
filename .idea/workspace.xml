@@ -19,29 +19,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="HybridServer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/HybridServer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="43" column="34" lean-forward="true" selection-start-line="43" selection-start-column="34" selection-end-line="43" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HTMLController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/controller/HTMLController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="14" column="36" lean-forward="false" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="36" />
-              <folding>
-                <element signature="e#370#371#0" expanded="true" />
-                <element signature="e#406#407#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="hbSEI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/webservice/hbSEI.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -54,14 +31,34 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="hbSIB.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="hbSIB.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/webservice/hbSIB.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="805">
-              <caret line="108" column="0" lean-forward="true" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
+            <state relative-caret-position="357">
+              <caret line="30" column="13" lean-forward="true" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bd.sql" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bd.sql">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="96" column="25" lean-forward="false" selection-start-line="96" selection-start-column="16" selection-end-line="96" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="XSLTManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/model/entity/xslt/XSLTManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1887">
+              <caret line="123" column="0" lean-forward="true" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -81,6 +78,16 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="68">
               <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HTTPResponse.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/http/HTTPResponse.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="395">
+              <caret line="83" column="40" lean-forward="true" selection-start-line="83" selection-start-column="40" selection-end-line="83" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -130,6 +137,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>setHtml</find>
+      <find>hstestdb3</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -147,7 +155,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/model/entity/HTMLManager.java" />
-        <option value="$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/http/HTTPResponse.java" />
         <option value="$PROJECT_DIR$/test/es/uvigo/esei/dai/hybridserver/week2/ClientRequetsTest.java" />
         <option value="$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/model/dao/XMLDAO.java" />
         <option value="$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/model/dao/XMLDBDAO.java" />
@@ -174,7 +181,6 @@
         <option value="/XPath Fragment (configuration.xsl:615).xpath" />
         <option value="$PROJECT_DIR$/configuration.xsl" />
         <option value="$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/model/entity/xsd/XSDManager.java" />
-        <option value="$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/model/entity/xslt/XSLTManager.java" />
         <option value="$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/ServiceThread.java" />
         <option value="$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/model/entity/html/HTMLManager.java" />
         <option value="$PROJECT_DIR$/config.conf" />
@@ -196,6 +202,8 @@
         <option value="$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/configuration/XMLConfigurationLoader.java" />
         <option value="$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/webservice/hbSEI.java" />
         <option value="$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/webservice/hbSIB.java" />
+        <option value="$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/model/entity/xslt/XSLTManager.java" />
+        <option value="$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/http/HTTPResponse.java" />
       </list>
     </option>
   </component>
@@ -370,6 +378,13 @@
               <item name="hybridserver" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="hybridserver" type="462c0819:PsiDirectoryNode" />
+              <item name="http" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hybridserver" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hybridserver" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="hybridserver" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -386,7 +401,15 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="hybridserver" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
-              <item name="dao" type="462c0819:PsiDirectoryNode" />
+              <item name="entity" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hybridserver" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hybridserver" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="hybridserver" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="entity" type="462c0819:PsiDirectoryNode" />
               <item name="xslt" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -670,7 +693,7 @@
       <workItem from="1513076931849" duration="7581000" />
       <workItem from="1513086292343" duration="119000" />
       <workItem from="1513184640647" duration="11117000" />
-      <workItem from="1513325802218" duration="10347000" />
+      <workItem from="1513325802218" duration="12288000" />
     </task>
     <servers />
   </component>
@@ -707,7 +730,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="60533000" />
+    <option name="totallyTimeSpent" value="62474000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="964" y="34" width="1920" height="1034" extended-state="6" />
@@ -718,11 +741,11 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36836284" sideWeight="0.196875" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27128264" sideWeight="0.803125" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.803125" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22945571" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14354323" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3278867" sideWeight="0.49583334" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -832,14 +855,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/model/entity/SimpleErrorHandler.java" />
-    <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/http/HTTPResponse.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1292">
-          <caret line="83" column="0" lean-forward="true" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/model/entity/AbstractManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
@@ -912,14 +927,6 @@
             <element signature="e#3335#3336#0" expanded="false" />
             <element signature="e#3360#3361#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/model/entity/xslt/XSLTManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1045,14 +1052,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bd.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-629">
-          <caret line="8" column="13" lean-forward="true" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/ServiceThread.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="714">
@@ -1169,11 +1168,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/webservice/hbSIB.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="805">
-          <caret line="108" column="0" lean-forward="true" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
+        <state relative-caret-position="357">
+          <caret line="30" column="13" lean-forward="true" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bd.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="96" column="25" lean-forward="false" selection-start-line="96" selection-start-column="16" selection-end-line="96" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/model/entity/xslt/XSLTManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1887">
+          <caret line="123" column="0" lean-forward="true" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/es/uvigo/esei/dai/hybridserver/http/HTTPResponse.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="395">
+          <caret line="83" column="40" lean-forward="true" selection-start-line="83" selection-start-column="40" selection-end-line="83" selection-end-column="40" />
+          <folding />
         </state>
       </provider>
     </entry>

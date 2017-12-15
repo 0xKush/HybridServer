@@ -77,22 +77,24 @@ public class HTTPResponse {
     }
 
     public void print(Writer writer) throws IOException, NullPointerException {
+
+        String param;
+        Iterator<String> stringIterator = parameters.keySet().iterator();
+
         writer.write(this.getVersion());
 
-        if (this.getStatus() != null)
+        if (this.getStatus() != null) {
             writer.write(" " + this.getStatus().getCode() + " " + this.getStatus().getStatus());
+        }
 
+        if (stringIterator.hasNext()) {
 
-        Iterator<String> it = parameters.keySet().iterator();
-        String aux;
-
-        if (it.hasNext()) {
             writer.write("\r\n");
-            while (it.hasNext()) {
-                aux = it.next();
-                writer.write(aux + ": " + parameters.get(aux) + "\r\n");
+            while (stringIterator.hasNext()) {
+                param = stringIterator.next();
+                writer.write(param + ": " + parameters.get(param) + "\r\n");
 
-                if (!it.hasNext()) {
+                if (!stringIterator.hasNext()) {
                     writer.write("\r\n");
                 }
             }
