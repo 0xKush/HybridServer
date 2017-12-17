@@ -6,7 +6,9 @@ import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
+import es.uvigo.esei.dai.hybridserver.webservice.hbSEI;
 
+import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +58,6 @@ public class HTMLManager extends AbstractManager {
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
 
-
         if (this.htmlController == null) {
             response = responseForInternalServerError("500 - Internal Server Error");
 
@@ -64,10 +65,8 @@ public class HTMLManager extends AbstractManager {
 
             if (resourceParameters.isEmpty()) {
 
-                //Tools.info("resource:html - without parameters");
-
-                List<Document> list = this.htmlController.list();
-                Iterator<Document> it = list.iterator();
+                List<Document> localList = this.htmlController.list();
+                Iterator<Document> it = localList.iterator();
                 StringBuilder content = new StringBuilder();
 
                 content.append("<html>\n" +
@@ -85,7 +84,28 @@ public class HTMLManager extends AbstractManager {
                             + "</li>\n");
                 }
 
-                //Tools.info("S200(OK)");
+                // == == == == == == WebServices == == == == == == ==
+
+                /*try {
+                    List<hbSEI> webServices = wsConnection(this.htmlController.getServerList());
+
+                    if (!webServices.isEmpty()) {
+                        for (hbSEI webService : webServices) {
+                            List<Document> remoteList = webService.HTMLUuidList();
+                            it = remoteList.iterator();
+
+                            while (it.hasNext()) {
+                                Document doc = it.next();
+                                content.append("<li>\n" + "<a href=\"html?uuid=" + doc.getUuid() + "\">" + doc.getUuid() + "</a>"
+                                        + "</li>\n");
+                            }
+                        }
+                    }
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }*/
+                // == == == == == == WebServices END == == == == == == == ;
 
                 content.append("\t</ul>\n" +
                         "\t\n" +

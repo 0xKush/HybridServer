@@ -2,8 +2,10 @@ package es.uvigo.esei.dai.hybridserver;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
 import java.util.Map;
 
+import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.http.*;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
@@ -27,13 +29,14 @@ public class ServiceThread implements Runnable {
     private XSLTManager XSLTManager;
     private SocketIOManager ioManager;
 
+
     public ServiceThread(Socket clientSocket, ControllerFactory factory) throws IOException {
         this.socket = clientSocket;
         this.factory = factory;
-        this.HTMLManager = new HTMLManager(factory);
-        this.XMLManager = new XMLManager(factory);
-        this.XSDManager = new XSDManager(factory);
-        this.XSLTManager = new XSLTManager(factory);
+        this.HTMLManager = new HTMLManager(this.factory);
+        this.XMLManager = new XMLManager(this.factory);
+        this.XSDManager = new XSDManager(this.factory);
+        this.XSLTManager = new XSLTManager(this.factory);
     }
 
     @Override

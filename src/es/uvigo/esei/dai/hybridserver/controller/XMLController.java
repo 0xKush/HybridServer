@@ -1,5 +1,6 @@
 package es.uvigo.esei.dai.hybridserver.controller;
 
+import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.model.dao.xml.XMLDAO;
 import es.uvigo.esei.dai.hybridserver.model.entity.xml.XML;
 
@@ -8,9 +9,15 @@ import java.util.List;
 public class XMLController {
 
     private XMLDAO xmldao;
+    private List<ServerConfiguration> serverList;
 
-    public XMLController(XMLDAO xmldao) {
+    public List<ServerConfiguration> getServerList() {
+        return serverList;
+    }
+
+    public XMLController(XMLDAO xmldao, List<ServerConfiguration> serverList) {
         this.xmldao = xmldao;
+        this.serverList = serverList;
     }
 
     public XML get(String uuid) {

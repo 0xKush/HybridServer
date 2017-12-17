@@ -1,9 +1,5 @@
 package es.uvigo.esei.dai.hybridserver.webservice;
-
 import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
-import es.uvigo.esei.dai.hybridserver.model.entity.xml.XML;
-import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
-import es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLT;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -12,16 +8,16 @@ import java.util.List;
 @WebService
 public interface hbSEI {
     @WebMethod
-    String[] HTMLUuidList();
+    List<Document> HTMLUuidList();
 
     @WebMethod
-    String[] XMLUuidList();
+    List<String> XMLUuidList();
 
     @WebMethod
-    String[] XSDUuidList();
+    List<String> XSDUuidList();
 
     @WebMethod
-    String[] XSLTUuidList();
+    List<String> XSLTUuidList();
 
     @WebMethod
     String getHTMLContent(String uuid);

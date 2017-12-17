@@ -1,9 +1,10 @@
 package es.uvigo.esei.dai.hybridserver.webservice;
 
-import es.uvigo.esei.dai.hybridserver.model.dao.html.HTMLDAO;
-import es.uvigo.esei.dai.hybridserver.model.dao.xml.XMLDAO;
-import es.uvigo.esei.dai.hybridserver.model.dao.xsd.XSDDAO;
-import es.uvigo.esei.dai.hybridserver.model.dao.xslt.XSLTDAO;
+import es.uvigo.esei.dai.hybridserver.controller.HTMLController;
+import es.uvigo.esei.dai.hybridserver.controller.XMLController;
+import es.uvigo.esei.dai.hybridserver.controller.XSDController;
+import es.uvigo.esei.dai.hybridserver.controller.XSLTController;
+import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
 import es.uvigo.esei.dai.hybridserver.model.entity.xml.XML;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
@@ -13,75 +14,70 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.jws.WebService;
 
-//@WebService(endpointInterface = "es.uvigo.esei.dai.hybridserver.webservice.hbSEI")
+@WebService(endpointInterface = "es.uvigo.esei.dai.hybridserver.webservice.hbSEI", serviceName = "hbWS")
 public class hbSIB implements hbSEI {
 
-    private HTMLDAO HTMLDao;
-    private XMLDAO XMLDao;
-    private XSDDAO XSDDao;
-    private XSLTDAO XSLTDao;
 
-    public hbSIB(HTMLDAO HTMLDao, XMLDAO XMLDao, XSDDAO XSDDao, XSLTDAO XSLTDao) {
-        this.HTMLDao = HTMLDao;
-        this.XMLDao = XMLDao;
-        this.XSDDao = XSDDao;
-        this.XSLTDao = XSLTDao;
+    private HTMLController htmlController;
+    private XMLController xmlController;
+    private XSDController xsdController;
+    private XSLTController xsltController;
+
+    public void setControllers(ControllerFactory factory) {
+        this.htmlController = factory.createHTMLController();
+        this.xmlController = factory.createXMLController();
+        this.xsdController = factory.createXSDController();
+        this.xsltController = factory.createXSLTController();
     }
 
     @Override
-    public String[] HTMLUuidList() {
-        List<Document> htmlList = this.HTMLDao.list();
-        List<String> HTMLUuidList = new ArrayList<>();
+    public List<Document> HTMLUuidList() {
 
-        for (Document doc : htmlList) {
-            HTMLUuidList.add(doc.getUuid());
-        }
-
-        return (String[]) HTMLUuidList.toArray();
+        return this.htmlController.list();
     }
 
     @Override
-    public String[] XMLUuidList() {
-        List<XML> xmlList = this.XMLDao.list();
+    public List<String> XMLUuidList() {
+        List<XML> xmlList = this.xmlController.list();
         List<String> XMLUuidList = new ArrayList<>();
 
         for (XML doc : xmlList) {
             XMLUuidList.add(doc.getUuid());
         }
 
-        return (String[]) XMLUuidList.toArray();
+        return XMLUuidList;
     }
 
     @Override
-    public String[] XSDUuidList() {
-        List<XSD> xsdList = this.XSDDao.list();
+    public List<String> XSDUuidList() {
+        List<XSD> xsdList = this.xsdController.list();
         List<String> XSDUuidList = new ArrayList<>();
 
         for (XSD doc : xsdList) {
             XSDUuidList.add(doc.getUuid());
         }
 
-        return (String[]) XSDUuidList.toArray();
+        return XSDUuidList;
     }
 
     @Override
-    public String[] XSLTUuidList() {
+    public List<String> XSLTUuidList() {
 
-        List<XSLT> xsltList = this.XSLTDao.list();
+        List<XSLT> xsltList = this.xsltController.list();
         List<String> XSLTUuidList = new ArrayList<>();
 
         for (XSLT doc : xsltList) {
             XSLTUuidList.add(doc.getUuid());
         }
 
-        return (String[]) XSLTUuidList.toArray();
+        return XSLTUuidList;
     }
 
     @Override
     public String getHTMLContent(String uuid) {
         Document doc;
 
-        if ((doc = this.HTMLDao.get(uuid)) != null)
+        if ((doc = this.htmlController.get(uuid)) != null)
             return doc.getContent();
         else
             return null;
@@ -91,7 +87,7 @@ public class hbSIB implements hbSEI {
     public String getXMLContent(String uuid) {
         XML doc;
 
-        if ((doc = this.XMLDao.get(uuid)) != null)
+        if ((doc = this.xmlController.get(uuid)) != null)
             return doc.getContent();
         else
             return null;
@@ -101,7 +97,7 @@ public class hbSIB implements hbSEI {
     public String getXSDContent(String uuid) {
         XSD doc;
 
-        if ((doc = this.XSDDao.get(uuid)) != null)
+        if ((doc = this.xsdController.get(uuid)) != null)
             return doc.getContent();
         else
             return null;
@@ -111,7 +107,7 @@ public class hbSIB implements hbSEI {
     public String getXSLTContent(String uuid) {
         XSLT doc;
 
-        if ((doc = this.XSLTDao.get(uuid)) != null)
+        if ((doc = this.xsltController.get(uuid)) != null)
             return doc.getContent();
         else
             return null;
@@ -121,7 +117,7 @@ public class hbSIB implements hbSEI {
     public String XSDUuid(String uuid) {
         XSLT doc;
 
-        if ((doc = this.XSLTDao.get(uuid)) != null)
+        if ((doc = this.xsltController.get(uuid)) != null)
             return doc.getXsd();
         else
             return null;

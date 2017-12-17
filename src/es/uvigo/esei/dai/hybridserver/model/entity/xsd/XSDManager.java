@@ -6,7 +6,6 @@ import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
-import es.uvigo.esei.dai.hybridserver.utils.Tools;
 
 import java.util.Iterator;
 import java.util.List;

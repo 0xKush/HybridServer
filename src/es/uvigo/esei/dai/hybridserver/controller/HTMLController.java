@@ -1,5 +1,6 @@
 package es.uvigo.esei.dai.hybridserver.controller;
 
+import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.model.dao.html.HTMLDAO;
 import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
 
@@ -7,9 +8,15 @@ import java.util.List;
 
 public class HTMLController {
     private HTMLDAO dao;
+    private List<ServerConfiguration> serverList;
 
-    public HTMLController(HTMLDAO dao) {
+    public List<ServerConfiguration> getServerList() {
+        return serverList;
+    }
+
+    public HTMLController(HTMLDAO dao, List<ServerConfiguration> serverList) {
         this.dao = dao;
+        this.serverList = serverList;
     }
 
     public Document get(String uuid) {

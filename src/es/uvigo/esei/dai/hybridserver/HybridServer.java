@@ -5,7 +5,9 @@ import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.controller.factory.DBControllerFactory;
 import es.uvigo.esei.dai.hybridserver.utils.Tools;
+import es.uvigo.esei.dai.hybridserver.webservice.hbSIB;
 
+import javax.xml.ws.Endpoint;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,7 +20,8 @@ public class HybridServer {
     private int servicePort;
     private int numClients;
     private String dbUrl, dbUser, dbPass, webService;
-    private List<ServerConfiguration> serviceList;
+    private List<ServerConfiguration> serverList;
+    private Endpoint endpoint;
     private ControllerFactory factory;
     private Configuration config;
 
@@ -37,15 +40,15 @@ public class HybridServer {
 
     public HybridServer(Configuration config) {
 
-        factory = new DBControllerFactory(config);
-
         servicePort = config.getHttpPort();
         numClients = config.getNumClients();
         dbUrl = config.getDbURL();
         dbUser = config.getDbUser();
         dbPass = config.getDbPassword();
         webService = config.getWebServiceURL();
-        serviceList = config.getServers();
+        serverList = config.getServers();
+
+        factory = new DBControllerFactory(config);
     }
 
     public HybridServer(Properties properties) {
@@ -65,6 +68,11 @@ public class HybridServer {
     }
 
     public void start() {
+
+        hbSIB hbSIB = new hbSIB();
+        hbSIB.setControllers(factory);
+        this.endpoint = Endpoint.publish(webService, hbSIB);
+
         Tools.info("RUNNING" + "\n" +
                 "Port: " + servicePort + "\n" +
                 "numClients: " + numClients + "\n" +
@@ -117,7 +125,7 @@ public class HybridServer {
         }
 
         this.serverThread = null;
-
+        this.endpoint.stop();
 
         threadPool.shutdownNow();
 

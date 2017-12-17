@@ -1,5 +1,6 @@
 package es.uvigo.esei.dai.hybridserver.controller;
 
+import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.model.dao.xsd.XSDDAO;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
 
@@ -8,9 +9,15 @@ import java.util.List;
 public class XSDController {
 
     private XSDDAO dao;
+    private List<ServerConfiguration> serverList;
 
-    public XSDController(XSDDAO dao) {
+    public List<ServerConfiguration> getServerList() {
+        return serverList;
+    }
+
+    public XSDController(XSDDAO dao, List<ServerConfiguration> serverList) {
         this.dao = dao;
+        this.serverList = serverList;
     }
 
     public XSD get(String uuid) {
