@@ -71,15 +71,17 @@ public class HybridServer {
 
         hbSIB hbSIB = new hbSIB();
         hbSIB.setControllers(factory);
-        this.endpoint = Endpoint.publish(webService, hbSIB);
+        if (webService != null)
+            this.endpoint = Endpoint.publish(webService, hbSIB);
 
+        /*
         Tools.info("RUNNING" + "\n" +
                 "Port: " + servicePort + "\n" +
                 "numClients: " + numClients + "\n" +
                 "dbUrl: " + dbUrl + "\n" +
                 "dbUser: " + dbUser + "\n" +
                 "dbPass: " + dbPass);
-
+        */
 
         this.serverThread = new Thread() {
             @Override
