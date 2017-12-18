@@ -4,11 +4,11 @@ import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
-import es.uvigo.esei.dai.hybridserver.webservice.hbSEI;
-import es.uvigo.esei.dai.hybridserver.webservice.hbSIB;
+import es.uvigo.esei.dai.hybridserver.hbSEI;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
+import javax.xml.ws.WebServiceException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -67,18 +67,20 @@ public abstract class AbstractManager {
         return response;
     }
 
-    public static List<hbSEI> wsConnection(List<ServerConfiguration> serverList) throws MalformedURLException {
+    public static List<hbSEI> wsConnection(List<ServerConfiguration> serverList) throws MalformedURLException, WebServiceException {
         List<hbSEI> remoteServices = new ArrayList<>();
 
         if (serverList != null) {
 
             for (ServerConfiguration server : serverList) {
-                URL url = new URL(server.getWsdl());
-                QName name = new QName(server.getNamespace(), server.getService());
-                Service service = Service.create(url, name);
+                if (server != null) {
+                    URL url = new URL(server.getWsdl());
+                    QName name = new QName(server.getNamespace(), server.getService());
+                    Service service = Service.create(url, name);
 
-                hbSEI webService = service.getPort(hbSIB.class);
-                remoteServices.add(webService);
+                    hbSEI webService = service.getPort(hbSEI.class);
+                    remoteServices.add(webService);
+                }
             }
         }
         return remoteServices;

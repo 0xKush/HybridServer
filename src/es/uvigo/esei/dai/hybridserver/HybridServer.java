@@ -4,8 +4,6 @@ import es.uvigo.esei.dai.hybridserver.configuration.Configuration;
 import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.controller.factory.DBControllerFactory;
-import es.uvigo.esei.dai.hybridserver.utils.Tools;
-import es.uvigo.esei.dai.hybridserver.webservice.hbSIB;
 
 import javax.xml.ws.Endpoint;
 import java.io.IOException;
@@ -69,10 +67,11 @@ public class HybridServer {
 
     public void start() {
 
-        hbSIB hbSIB = new hbSIB();
-        hbSIB.setControllers(factory);
-        if (webService != null)
+        if (this.webService != null) {
+            hbSIB hbSIB = new hbSIB();
+            hbSIB.setControllers(factory);
             this.endpoint = Endpoint.publish(webService, hbSIB);
+        }
 
         /*
         Tools.info("RUNNING" + "\n" +
@@ -127,7 +126,9 @@ public class HybridServer {
         }
 
         this.serverThread = null;
-        this.endpoint.stop();
+
+        if (this.webService != null)
+            this.endpoint.stop();
 
         threadPool.shutdownNow();
 

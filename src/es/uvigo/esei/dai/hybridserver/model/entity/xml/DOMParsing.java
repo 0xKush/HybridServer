@@ -47,6 +47,7 @@ public class DOMParsing {
 
 
     public static void validateWithXSD(XML xml, XSD xsd) throws SAXException, ParserConfigurationException, IOException {
+
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Schema schema = factory.newSchema(new StreamSource(new StringReader(xsd.getContent())));
         Validator validator = schema.newValidator();

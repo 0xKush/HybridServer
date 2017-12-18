@@ -1,10 +1,11 @@
-package es.uvigo.esei.dai.hybridserver.webservice;
+package es.uvigo.esei.dai.hybridserver;
 
 import es.uvigo.esei.dai.hybridserver.controller.HTMLController;
 import es.uvigo.esei.dai.hybridserver.controller.XMLController;
 import es.uvigo.esei.dai.hybridserver.controller.XSDController;
 import es.uvigo.esei.dai.hybridserver.controller.XSLTController;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
+import es.uvigo.esei.dai.hybridserver.hbSEI;
 import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
 import es.uvigo.esei.dai.hybridserver.model.entity.xml.XML;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.jws.WebService;
 
-@WebService(endpointInterface = "es.uvigo.esei.dai.hybridserver.webservice.hbSEI", serviceName = "hbWS")
+@WebService(endpointInterface = "es.uvigo.esei.dai.hybridserver.hbSEI", serviceName = "HybridServerService")
 public class hbSIB implements hbSEI {
 
 

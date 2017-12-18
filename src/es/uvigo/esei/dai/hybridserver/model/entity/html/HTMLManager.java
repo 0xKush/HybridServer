@@ -6,8 +6,9 @@ import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
-import es.uvigo.esei.dai.hybridserver.webservice.hbSEI;
+import es.uvigo.esei.dai.hybridserver.hbSEI;
 
+import javax.xml.ws.WebServiceException;
 import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
@@ -86,7 +87,7 @@ public class HTMLManager extends AbstractManager {
 
                 // == == == == == == WebServices == == == == == == ==
 
-                /*try {
+                try {
                     List<hbSEI> webServices = wsConnection(this.htmlController.getServerList());
 
                     if (!webServices.isEmpty()) {
@@ -102,9 +103,9 @@ public class HTMLManager extends AbstractManager {
                         }
                     }
 
-                } catch (MalformedURLException e) {
+                } catch (MalformedURLException | WebServiceException e) {
                     e.printStackTrace();
-                }*/
+                }
                 // == == == == == == WebServices END == == == == == == == ;
 
                 content.append("\t</ul>\n" +

@@ -45,7 +45,7 @@ public class XMLManager extends AbstractManager {
     }
 
 
-    public HTTPResponse responseForGET(Map<String, String> resourceParameters) {
+    public HTTPResponse responseForGET(Map<String, String> resourceParameters)  {
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
@@ -137,6 +137,7 @@ public class XMLManager extends AbstractManager {
                                 } catch (ParserConfigurationException | IOException | SAXException e) {
                                     e.printStackTrace();
                                     response = responseForBadRequest("400 - The XML could not be validated");
+
                                 } catch (TransformerException e) {
                                     e.printStackTrace();
                                     response = responseForInternalServerError("500 - The XML could not be transformed");

@@ -1,4 +1,4 @@
-package es.uvigo.esei.dai.hybridserver.webservice;
+package es.uvigo.esei.dai.hybridserver;
 import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
 
 import javax.jws.WebMethod;
