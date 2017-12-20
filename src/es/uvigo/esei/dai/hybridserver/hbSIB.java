@@ -38,40 +38,19 @@ public class hbSIB implements hbSEI {
     }
 
     @Override
-    public List<String> XMLUuidList() {
-        List<XML> xmlList = this.xmlController.list();
-        List<String> XMLUuidList = new ArrayList<>();
+    public List<XML> XMLUuidList() {
+        return this.xmlController.list();
 
-        for (XML doc : xmlList) {
-            XMLUuidList.add(doc.getUuid());
-        }
-
-        return XMLUuidList;
     }
 
     @Override
-    public List<String> XSDUuidList() {
-        List<XSD> xsdList = this.xsdController.list();
-        List<String> XSDUuidList = new ArrayList<>();
-
-        for (XSD doc : xsdList) {
-            XSDUuidList.add(doc.getUuid());
-        }
-
-        return XSDUuidList;
+    public List<XSD> XSDUuidList() {
+        return this.xsdController.list();
     }
 
     @Override
-    public List<String> XSLTUuidList() {
-
-        List<XSLT> xsltList = this.xsltController.list();
-        List<String> XSLTUuidList = new ArrayList<>();
-
-        for (XSLT doc : xsltList) {
-            XSLTUuidList.add(doc.getUuid());
-        }
-
-        return XSLTUuidList;
+    public List<XSLT> XSLTUuidList() {
+        return this.xsltController.list();
     }
 
     @Override

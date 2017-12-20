@@ -4,6 +4,8 @@ public class XSD {
     private String uuid;
     private String content;
 
+    public XSD() {
+    }
 
     public XSD(String uuid, String content) {
         super();

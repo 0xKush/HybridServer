@@ -5,6 +5,9 @@ public class XSLT {
     private String content;
     private String xsd;
 
+    public XSLT() {
+    }
+
     public XSLT(String uuid, String content, String xsd) {
         super();
         this.uuid = uuid;

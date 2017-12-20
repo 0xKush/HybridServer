@@ -16,13 +16,10 @@ public class Launcher {
             server = new HybridServer();
 
         } else if (args.length == 1) {
-
-            try (FileReader input2 = new FileReader(args[0])) {
-                File xmlFile= new File(args[0]);
+            try {
+                File xmlFile = new File(args[0]);
                 XMLConfigurationLoader xmlLoader = new XMLConfigurationLoader();
                 Configuration config = xmlLoader.load(xmlFile);
-                //Properties config = new Properties();
-                //config.load(input2);
                 server = new HybridServer(config);
 
             } catch (Exception e) {

@@ -5,6 +5,9 @@ public class XML {
     private String content;
 
 
+    public XML() {
+    }
+
     public XML(String uuid, String content) {
         super();
         this.uuid = uuid;

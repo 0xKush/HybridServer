@@ -1,27 +1,38 @@
 package es.uvigo.esei.dai.hybridserver.model.entity.xsd;
 
+import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.XSDController;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
+import es.uvigo.esei.dai.hybridserver.hbSEI;
 import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
 
+import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsConnection;
+import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsGetContent;
+import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsGetList;
+
 public class XSDManager extends AbstractManager {
 
 
     private XSDController xsdController;
+    private Map<ServerConfiguration, hbSEI> remoteServices;
 
     public XSDManager(ControllerFactory factory) {
-        if (factory != null)
+        if (factory != null) {
             this.xsdController = factory.createXSDController();
-        else
+            this.remoteServices = wsConnection(this.xsdController.getServerList());
+        } else {
             this.xsdController = null;
+            this.remoteServices = null;
+        }
     }
 
 
@@ -30,6 +41,7 @@ public class XSDManager extends AbstractManager {
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
+        String remoteContent;
 
 
         if (this.xsdController == null) {
@@ -59,12 +71,20 @@ public class XSDManager extends AbstractManager {
                             + "</li>\n");
                 }
 
-                //Tools.info("S200(OK)");
+                //== == == == == == WebServices == == == == == == ==
+
+                if (this.remoteServices != null) {
+                    remoteContent = wsGetList(this.remoteServices, "xsd");
+                    content.append(remoteContent);
+                }
+
+                //== == == == == == WebServices END == == == == ====
 
                 content.append("\t</ul>\n" +
                         "\t\n" +
                         "</body>\n" +
                         "</html>");
+
                 response.setStatus(HTTPResponseStatus.S200);
                 response.putParameter("Content-Type", "text/html");
                 response.setContent(content.toString());
@@ -88,7 +108,21 @@ public class XSDManager extends AbstractManager {
                         response.setContent(xsd.getContent());
 
                     } else {
-                        response = responseForNotFound("404 - The XML does not exists");
+                        //== == == == == == WebServices == == == == == == ==
+                        if (this.remoteServices != null) {
+                            if ((remoteContent = wsGetContent(this.remoteServices, "xsd", uuid)) != null) {
+
+                                response.setStatus(HTTPResponseStatus.S200);
+                                response.putParameter("Content-Type", "application/xml");
+                                response.setContent(remoteContent);
+
+                            } else {
+                                response = responseForNotFound("404 - The XSD does not exist");
+                            }
+                        } else {
+                            response = responseForNotFound("404 - The XSD does not exist");
+                        }
+                        //== == == == == == WebServices END == == == == ====
                     }
                 } else {
                     response = responseForNotFound("404 - Not Found");
@@ -153,10 +187,10 @@ public class XSDManager extends AbstractManager {
                     this.xsdController.delete(uuid);
                     response.setStatus(HTTPResponseStatus.S200);
                     response.putParameter("Content-Type", "text/html");
-                    response.setContent("The XML has been deleted");
+                    response.setContent("The XSD has been deleted");
 
                 } else {
-                    response = responseForNotFound("404 - The XML does not exists");
+                    response = responseForNotFound("404 - The XSD does not exist");
                 }
             } else {
                 response = responseForBadRequest("400 - Invalid parameter");

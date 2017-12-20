@@ -4,6 +4,7 @@ import es.uvigo.esei.dai.hybridserver.configuration.Configuration;
 import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.controller.factory.DBControllerFactory;
+import es.uvigo.esei.dai.hybridserver.utils.Tools;
 
 import javax.xml.ws.Endpoint;
 import java.io.IOException;
@@ -73,14 +74,14 @@ public class HybridServer {
             this.endpoint = Endpoint.publish(webService, hbSIB);
         }
 
-        /*
+
         Tools.info("RUNNING" + "\n" +
                 "Port: " + servicePort + "\n" +
                 "numClients: " + numClients + "\n" +
                 "dbUrl: " + dbUrl + "\n" +
                 "dbUser: " + dbUser + "\n" +
                 "dbPass: " + dbPass);
-        */
+
 
         this.serverThread = new Thread() {
             @Override

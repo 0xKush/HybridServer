@@ -1,5 +1,6 @@
 package es.uvigo.esei.dai.hybridserver.model.entity.html;
 
+import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.HTMLController;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
@@ -8,24 +9,32 @@ import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
 import es.uvigo.esei.dai.hybridserver.hbSEI;
 
-import javax.xml.ws.WebServiceException;
-import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsConnection;
+import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsGetContent;
+import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsGetList;
 
 
 public class HTMLManager extends AbstractManager {
 
 
     private HTMLController htmlController;
+    private Map<ServerConfiguration, hbSEI> remoteServices;
 
     public HTMLManager(ControllerFactory factory) {
-        if (factory != null)
+
+        if (factory != null) {
             this.htmlController = factory.createHTMLController();
-        else
+            this.remoteServices = wsConnection(this.htmlController.getServerList());
+
+        } else {
             this.htmlController = null;
+            this.remoteServices = null;
+        }
     }
 
     public HTTPResponse responseForRoot() {
@@ -58,6 +67,7 @@ public class HTMLManager extends AbstractManager {
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
+        String remoteContent;
 
         if (this.htmlController == null) {
             response = responseForInternalServerError("500 - Internal Server Error");
@@ -70,6 +80,7 @@ public class HTMLManager extends AbstractManager {
                 Iterator<Document> it = localList.iterator();
                 StringBuilder content = new StringBuilder();
 
+
                 content.append("<html>\n" +
                         "<head>\n" +
                         "\t<meta charset=\"UTF-8\">\n" +
@@ -79,34 +90,19 @@ public class HTMLManager extends AbstractManager {
                         "<body><ul>");
 
                 while (it.hasNext()) {
-
                     Document doc = it.next();
                     content.append("<li>\n" + "<a href=\"html?uuid=" + doc.getUuid() + "\">" + doc.getUuid() + "</a>"
                             + "</li>\n");
                 }
 
-                // == == == == == == WebServices == == == == == == ==
+                //== == == == == == WebServices == == == == == == ==
 
-                try {
-                    List<hbSEI> webServices = wsConnection(this.htmlController.getServerList());
-
-                    if (!webServices.isEmpty()) {
-                        for (hbSEI webService : webServices) {
-                            List<Document> remoteList = webService.HTMLUuidList();
-                            it = remoteList.iterator();
-
-                            while (it.hasNext()) {
-                                Document doc = it.next();
-                                content.append("<li>\n" + "<a href=\"html?uuid=" + doc.getUuid() + "\">" + doc.getUuid() + "</a>"
-                                        + "</li>\n");
-                            }
-                        }
-                    }
-
-                } catch (MalformedURLException | WebServiceException e) {
-                    e.printStackTrace();
+                if (this.remoteServices != null) {
+                    remoteContent = wsGetList(this.remoteServices, "html");
+                    content.append(remoteContent);
                 }
-                // == == == == == == WebServices END == == == == == == == ;
+
+                //== == == == == == WebServices END == == == == ====
 
                 content.append("\t</ul>\n" +
                         "\t\n" +
@@ -129,14 +125,26 @@ public class HTMLManager extends AbstractManager {
 
                     if (doc != null) {
 
-                        //Tools.info("S200(OK)");
-
                         response.setStatus(HTTPResponseStatus.S200);
                         response.putParameter("Content-Type", "text/html");
                         response.setContent(doc.getContent());
 
                     } else {
-                        response = responseForNotFound("404 - The page does not exists");
+                        //== == == == == == WebServices == == == == == == ==
+                        if (this.remoteServices != null) {
+                            if ((remoteContent = wsGetContent(this.remoteServices, "html", uuid)) != null) {
+
+                                response.setStatus(HTTPResponseStatus.S200);
+                                response.putParameter("Content-Type", "text/html");
+                                response.setContent(remoteContent);
+
+                            } else {
+                                response = responseForNotFound("404 - The page does not exist");
+                            }
+                        } else {
+                            response = responseForNotFound("404 - The page does not exist");
+                        }
+                        //== == == == == == WebServices END == == == == ====
                     }
                 } else {
                     response = responseForNotFound("404 - Not Found");
@@ -169,7 +177,7 @@ public class HTMLManager extends AbstractManager {
                     response.setContent("The page has been deleted");
 
                 } else {
-                    response = responseForNotFound("404 - The page does not exists");
+                    response = responseForNotFound("404 - The page does not exist");
                 }
             } else {
                 response = responseForBadRequest("400 - Invalid parameter");
