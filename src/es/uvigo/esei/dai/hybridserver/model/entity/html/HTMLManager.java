@@ -7,33 +7,26 @@ import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
-import es.uvigo.esei.dai.hybridserver.hbSEI;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsConnection;
-import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsGetContent;
-import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsGetList;
+;
 
 
 public class HTMLManager extends AbstractManager {
 
 
     private HTMLController htmlController;
-    private Map<ServerConfiguration, hbSEI> remoteServices;
 
     public HTMLManager(ControllerFactory factory) {
 
         if (factory != null) {
             this.htmlController = factory.createHTMLController();
-            this.remoteServices = wsConnection(this.htmlController.getServerList());
 
         } else {
             this.htmlController = null;
-            this.remoteServices = null;
         }
     }
 
@@ -67,7 +60,6 @@ public class HTMLManager extends AbstractManager {
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
-        String remoteContent;
 
         if (this.htmlController == null) {
             response = responseForInternalServerError("500 - Internal Server Error");
@@ -96,12 +88,27 @@ public class HTMLManager extends AbstractManager {
                 }
 
                 //== == == == == == WebServices == == == == == == ==
+                Map<ServerConfiguration, List<Document>> remotes = this.htmlController.remoteList();
 
-                if (this.remoteServices != null) {
-                    remoteContent = wsGetList(this.remoteServices, "html");
-                    content.append(remoteContent);
+                if (remotes != null) {
+
+                    for (Map.Entry<ServerConfiguration, List<Document>> remote : remotes.entrySet()) {
+                        ServerConfiguration serverConfiguration = remote.getKey();
+                        List<Document> remoteList = remote.getValue();
+                        it = remoteList.iterator();
+
+                        content.append("\n<h1>" + serverConfiguration.getName() + "</h1>\n");
+
+                        if (!remoteList.isEmpty()) {
+                            while (it.hasNext()) {
+                                Document doc = it.next();
+                                content.append("<li>\n" + "<a href=\"" + serverConfiguration.getHttpAddress() + "html?uuid=" + doc.getUuid() + "\">" + doc.getUuid() + "</a>"
+                                        + "</li>\n");
+
+                            }
+                        }
+                    }
                 }
-
                 //== == == == == == WebServices END == == == == ====
 
                 content.append("\t</ul>\n" +
@@ -130,21 +137,7 @@ public class HTMLManager extends AbstractManager {
                         response.setContent(doc.getContent());
 
                     } else {
-                        //== == == == == == WebServices == == == == == == ==
-                        if (this.remoteServices != null) {
-                            if ((remoteContent = wsGetContent(this.remoteServices, "html", uuid)) != null) {
-
-                                response.setStatus(HTTPResponseStatus.S200);
-                                response.putParameter("Content-Type", "text/html");
-                                response.setContent(remoteContent);
-
-                            } else {
-                                response = responseForNotFound("404 - The page does not exist");
-                            }
-                        } else {
-                            response = responseForNotFound("404 - The page does not exist");
-                        }
-                        //== == == == == == WebServices END == == == == ====
+                        response = responseForNotFound("404 - The page does not exist");
                     }
                 } else {
                     response = responseForNotFound("404 - Not Found");

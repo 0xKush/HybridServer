@@ -1,4 +1,5 @@
 package es.uvigo.esei.dai.hybridserver;
+
 import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
 import es.uvigo.esei.dai.hybridserver.model.entity.xml.XML;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
@@ -23,17 +24,17 @@ public interface hbSEI {
     List<XSLT> XSLTUuidList();
 
     @WebMethod
-    String getHTMLContent(String uuid);
+    Document getHTML(String uuid);
 
     @WebMethod
-    String getXMLContent(String uuid);
+    XML getXML(String uuid);
 
     @WebMethod
-    String getXSDContent(String uuid);
+    XSD getXSD(String uuid);
 
     @WebMethod
-    String getXSLTContent(String uuid);
+    XSLT getXSLT(String uuid);
 
     @WebMethod
-    String XSDUuid(String XSLTUuid);
+    XSD getAssociatedXSD(String XSLTUuid);
 }

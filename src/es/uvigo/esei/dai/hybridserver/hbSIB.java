@@ -33,7 +33,6 @@ public class hbSIB implements hbSEI {
 
     @Override
     public List<Document> HTMLUuidList() {
-
         return this.htmlController.list();
     }
 
@@ -54,52 +53,27 @@ public class hbSIB implements hbSEI {
     }
 
     @Override
-    public String getHTMLContent(String uuid) {
-        Document doc;
-
-        if ((doc = this.htmlController.get(uuid)) != null)
-            return doc.getContent();
-        else
-            return null;
+    public Document getHTML(String uuid) {
+        return this.htmlController.get(uuid);
     }
 
     @Override
-    public String getXMLContent(String uuid) {
-        XML doc;
-
-        if ((doc = this.xmlController.get(uuid)) != null)
-            return doc.getContent();
-        else
-            return null;
+    public XML getXML(String uuid) {
+        return this.xmlController.get(uuid);
     }
 
     @Override
-    public String getXSDContent(String uuid) {
-        XSD doc;
-
-        if ((doc = this.xsdController.get(uuid)) != null)
-            return doc.getContent();
-        else
-            return null;
+    public XSD getXSD(String uuid) {
+        return this.xsdController.get(uuid);
     }
 
     @Override
-    public String getXSLTContent(String uuid) {
-        XSLT doc;
-
-        if ((doc = this.xsltController.get(uuid)) != null)
-            return doc.getContent();
-        else
-            return null;
+    public XSLT getXSLT(String uuid) {
+        return this.xsltController.get(uuid);
     }
 
     @Override
-    public String XSDUuid(String uuid) {
-        XSLT doc;
-
-        if ((doc = this.xsltController.get(uuid)) != null)
-            return doc.getXsd();
-        else
-            return null;
+    public XSD getAssociatedXSD(String uuid) {
+        return this.xsdController.get(this.xsltController.get(uuid).getXsd());
     }
 }

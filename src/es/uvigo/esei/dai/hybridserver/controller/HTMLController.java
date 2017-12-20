@@ -1,30 +1,64 @@
 package es.uvigo.esei.dai.hybridserver.controller;
 
 import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
+import es.uvigo.esei.dai.hybridserver.hbSEI;
 import es.uvigo.esei.dai.hybridserver.model.dao.html.HTMLDAO;
 import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
+import es.uvigo.esei.dai.hybridserver.model.entity.wsManager;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class HTMLController {
     private HTMLDAO dao;
-    private List<ServerConfiguration> serverList;
+    private wsManager ws;
 
-    public List<ServerConfiguration> getServerList() {
-        return serverList;
+    public wsManager getWs() {
+        return ws;
     }
 
     public HTMLController(HTMLDAO dao, List<ServerConfiguration> serverList) {
         this.dao = dao;
-        this.serverList = serverList;
+        this.ws = new wsManager(serverList);
     }
 
     public Document get(String uuid) {
-        return dao.get(uuid);
-    }
+        Document doc;
+        doc = dao.get(uuid);
 
+        if (doc != null) {
+            return doc;
+        } else {
+            if (!getWs().getRemoteServices().isEmpty()) {
+                for (Map.Entry<ServerConfiguration, hbSEI> server : getWs().getRemoteServices().entrySet()) {
+                    doc = server.getValue().getHTML(uuid);
+                    if (doc != null)
+                        break;
+                }
+            }
+        }
+        return doc;
+    }
     public List<Document> list() {
         return dao.list();
+    }
+
+    public Map<ServerConfiguration, List<Document>> remoteList() {
+
+        Map<ServerConfiguration, List<Document>> remoteList = null;
+
+        if (!getWs().getRemoteServices().isEmpty()) {
+
+            for (Map.Entry<ServerConfiguration, hbSEI> server : getWs().getRemoteServices().entrySet()) {
+
+                ServerConfiguration serverConfiguration = server.getKey();
+                List<Document> remoteDocumentList = server.getValue().HTMLUuidList();
+                remoteList.put(serverConfiguration, remoteDocumentList);
+            }
+
+        }
+        return remoteList;
     }
 
     public void add(String uuid, String content) {

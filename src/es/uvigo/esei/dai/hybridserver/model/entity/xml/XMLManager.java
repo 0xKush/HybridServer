@@ -5,29 +5,22 @@ import es.uvigo.esei.dai.hybridserver.controller.XMLController;
 import es.uvigo.esei.dai.hybridserver.controller.XSDController;
 import es.uvigo.esei.dai.hybridserver.controller.XSLTController;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
-import es.uvigo.esei.dai.hybridserver.hbSEI;
 import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
-import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
 import es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLT;
 import org.xml.sax.SAXException;
 
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsConnection;
-import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsGetContent;
-import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsGetList;
 import static es.uvigo.esei.dai.hybridserver.model.entity.xml.DOMParsing.validateWithXSD;
 import static es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLTUtils.transform;
 
@@ -36,7 +29,6 @@ public class XMLManager extends AbstractManager {
     private XMLController xmlController;
     private XSDController xsdController;
     private XSLTController xsltController;
-    private Map<ServerConfiguration, hbSEI> remoteServices;
 
     public XMLManager(ControllerFactory factory) {
 
@@ -44,14 +36,11 @@ public class XMLManager extends AbstractManager {
             this.xmlController = factory.createXMLController();
             this.xsdController = factory.createXSDController();
             this.xsltController = factory.createXSLTController();
-            this.remoteServices = wsConnection(this.xmlController.getServerList());
-
 
         } else {
             this.xmlController = null;
             this.xsdController = null;
             this.xsltController = null;
-            this.remoteServices = null;
         }
     }
 
@@ -60,7 +49,6 @@ public class XMLManager extends AbstractManager {
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
-        String remoteContent;
 
 
         if (this.xmlController == null) {
@@ -93,12 +81,24 @@ public class XMLManager extends AbstractManager {
 
 
                 //== == == == == == WebServices == == == == == == ==
+                Map<ServerConfiguration, List<XML>> remotes = this.xmlController.remoteList();
 
-                if (this.remoteServices != null) {
-                    remoteContent = wsGetList(this.remoteServices, "xml");
-                    content.append(remoteContent);
+                for (Map.Entry<ServerConfiguration, List<XML>> remote : remotes.entrySet()) {
+                    ServerConfiguration serverConfiguration = remote.getKey();
+                    List<XML> remoteList = remote.getValue();
+                    it = remoteList.iterator();
+
+                    content.append("\n<h1>" + serverConfiguration.getName() + "</h1>\n");
+
+                    if (!remoteList.isEmpty()) {
+                        while (it.hasNext()) {
+                            XML doc = it.next();
+                            content.append("<li>\n" + "<a href=\"" + serverConfiguration.getHttpAddress() + "xml?uuid=" + doc.getUuid() + "\">" + doc.getUuid() + "</a>"
+                                    + "</li>\n");
+
+                        }
+                    }
                 }
-
                 //== == == == == == WebServices END == == == == ====
 
                 content.append("\t</ul>\n" +
@@ -121,123 +121,61 @@ public class XMLManager extends AbstractManager {
 
                     if (xml != null) {
 
-                        //Tools.info("S200(OK)");
-
                         response.setStatus(HTTPResponseStatus.S200);
                         response.putParameter("Content-Type", "application/xml");
                         response.setContent(xml.getContent());
 
                     } else {
-                        //== == == == == == WebServices == == == == == == ==
-                        if (this.remoteServices != null) {
-                            if ((remoteContent = wsGetContent(this.remoteServices, "xml", uuid)) != null) {
-
-                                response.setStatus(HTTPResponseStatus.S200);
-                                response.putParameter("Content-Type", "application/xml");
-                                response.setContent(remoteContent);
-
-                            } else {
-                                response = responseForNotFound("404 - The XML does not exist");
-                            }
-                        } else {
-                            response = responseForNotFound("404 - The XML does not exist");
-                        }
-                        //== == == == == == WebServices END == == == == ====
+                        response = responseForNotFound("404 - The XML does not exist");
                     }
                 } else if (resourceParameters.size() == 2 && resourceParameters.containsKey("uuid") && resourceParameters.containsKey("xslt")) {
 
                     String uuidXML = resourceParameters.get("uuid");
-                    XML xml;
+                    XML xml = xmlController.get(uuidXML);
 
-                    if ((xml = xmlController.get(uuidXML)) == null) {
-                        //== == == == == == WebServices == == == == == == ==
-                        if (this.remoteServices != null) {
-                            String xmlContent = wsGetContent(this.remoteServices, "xml", uuidXML);
+                    if (xml != null) {
 
-                            if (xmlContent != null) {
-                                xml = new XML(uuidXML, xmlContent);
+                        String uuidXSLT = resourceParameters.get("xslt");
+                        XSLT xslt = xsltController.get(uuidXSLT);
 
-                            } else {
-                                response = responseForBadRequest("400 - The XML does not exist");
-                            }
-                        } else {
-                            response = responseForBadRequest("400 - The XML does not exist");
-                        }
-                        //== == == == == == WebServices END == == == == ===
-                    }
+                        if (xslt != null) {
 
-                    String uuidXSLT = resourceParameters.get("xslt");
-                    XSLT xslt;
-                    XSD xsd;
+                            String uuidXSD = xslt.getXsd();
+                            XSD xsd = xsdController.get(uuidXSD);
 
-                    if ((xslt = xsltController.get(uuidXSLT)) == null) {
-                        //== == == == == == WebServices == == == == == == ==
+                            if (xsd != null) {
 
-                        if (this.remoteServices != null) {
-                            String xsltContent = wsGetContent(this.remoteServices, "xslt", uuidXSLT);
+                                try {
+                                    validateWithXSD(xml, xsd);
+                                    String transformedXML = transform(xml, xslt);
 
-                            if (xsltContent != null) {
+                                    response.setStatus(HTTPResponseStatus.S200);
+                                    response.putParameter("Content-Type", "text/html");
+                                    response.setContent(transformedXML);
 
-                                String uuidXSD = wsGetContent(this.remoteServices, "xml-xsd", uuidXSLT);
+                                } catch (ParserConfigurationException | IOException | SAXException e) {
+                                    e.printStackTrace();
+                                    response = responseForBadRequest("400 - The XML could not be validated");
 
-                                if (uuidXSD != null) {
-                                    xslt = new XSLT(uuidXSLT, xsltContent, uuidXSD);
-
-                                    String xsdContent = wsGetContent(this.remoteServices, "xsd", uuidXSD);
-
-                                    if (xsdContent != null) {
-                                        xsd = new XSD(uuidXSD, xsdContent);
-                                    }
-
-                                } else {
-                                    response = responseForBadRequest("400 - The XSD does not exist");
+                                } catch (TransformerException e) {
+                                    e.printStackTrace();
+                                    response = responseForInternalServerError("500 - The XML could not be transformed");
                                 }
 
-                            } else {
-                                response = responseForBadRequest("400 - The XSLT does not exist");
-                            }
-                        } else {
-                            response = responseForBadRequest("400 - The XSLT does not exist");
-                        }
-                    } else {
-                        //== == == == == == WebServices END == == == == ===
-                        String uuidXSD = xslt.getXsd();
-
-                        if ((xsd = xsdController.get(uuidXSD)) == null) {
-                            //== == == == == == WebServices == == == == == == ==
-
-                            if (this.remoteServices != null) {
-                                String xsdContent = wsGetContent(this.remoteServices, "xml-xsd", uuidXSD);
-
-                                if (xsdContent != null) {
-                                    xsd = new XSD(uuidXSD, xsdContent);
-
-                                } else {
-                                    response = responseForBadRequest("400 - The XSD does not exist");
-                                }
                             } else {
                                 response = responseForBadRequest("400 - The XSD does not exist");
                             }
-                            //== == == == == == WebServices END == == == == ===
+
+                        } else {
+                            response = responseForNotFound("404 - The XSLT asociated does not exist");
                         }
 
-                        try {
-                            validateWithXSD(xml, xsd);
-                            String transformedXML = transform(xml, xslt);
-
-                            response.setStatus(HTTPResponseStatus.S200);
-                            response.putParameter("Content-Type", "text/html");
-                            response.setContent(transformedXML);
-
-                        } catch (ParserConfigurationException | IOException | SAXException e) {
-                            e.printStackTrace();
-                            response = responseForBadRequest("400 - The XML could not be validated");
-
-                        } catch (TransformerException e) {
-                            e.printStackTrace();
-                            response = responseForInternalServerError("500 - The XML could not be transformed");
-                        }
+                    } else {
+                        response = responseForNotFound("404 - The XML does not exist");
                     }
+
+                } else {
+                    response = responseForNotFound("404 - Not Found");
                 }
             }
         }

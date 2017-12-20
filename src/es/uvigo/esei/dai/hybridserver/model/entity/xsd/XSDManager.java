@@ -3,35 +3,26 @@ package es.uvigo.esei.dai.hybridserver.model.entity.xsd;
 import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.XSDController;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
-import es.uvigo.esei.dai.hybridserver.hbSEI;
 import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
 
-import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsConnection;
-import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsGetContent;
-import static es.uvigo.esei.dai.hybridserver.model.entity.wsManager.wsGetList;
-
 public class XSDManager extends AbstractManager {
 
 
     private XSDController xsdController;
-    private Map<ServerConfiguration, hbSEI> remoteServices;
 
     public XSDManager(ControllerFactory factory) {
         if (factory != null) {
             this.xsdController = factory.createXSDController();
-            this.remoteServices = wsConnection(this.xsdController.getServerList());
         } else {
             this.xsdController = null;
-            this.remoteServices = null;
         }
     }
 
@@ -41,8 +32,6 @@ public class XSDManager extends AbstractManager {
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
-        String remoteContent;
-
 
         if (this.xsdController == null) {
             response = responseForInternalServerError("500 - Internal Server Error");
@@ -72,12 +61,24 @@ public class XSDManager extends AbstractManager {
                 }
 
                 //== == == == == == WebServices == == == == == == ==
+                Map<ServerConfiguration, List<XSD>> remotes = this.xsdController.remoteList();
 
-                if (this.remoteServices != null) {
-                    remoteContent = wsGetList(this.remoteServices, "xsd");
-                    content.append(remoteContent);
+                for (Map.Entry<ServerConfiguration, List<XSD>> remote : remotes.entrySet()) {
+                    ServerConfiguration serverConfiguration = remote.getKey();
+                    List<XSD> remoteList = remote.getValue();
+                    it = remoteList.iterator();
+
+                    content.append("\n<h1>" + serverConfiguration.getName() + "</h1>\n");
+
+                    if (!remoteList.isEmpty()) {
+                        while (it.hasNext()) {
+                            XSD doc = it.next();
+                            content.append("<li>\n" + "<a href=\"" + serverConfiguration.getHttpAddress() + "xsd?uuid=" + doc.getUuid() + "\">" + doc.getUuid() + "</a>"
+                                    + "</li>\n");
+
+                        }
+                    }
                 }
-
                 //== == == == == == WebServices END == == == == ====
 
                 content.append("\t</ul>\n" +
@@ -108,21 +109,7 @@ public class XSDManager extends AbstractManager {
                         response.setContent(xsd.getContent());
 
                     } else {
-                        //== == == == == == WebServices == == == == == == ==
-                        if (this.remoteServices != null) {
-                            if ((remoteContent = wsGetContent(this.remoteServices, "xsd", uuid)) != null) {
-
-                                response.setStatus(HTTPResponseStatus.S200);
-                                response.putParameter("Content-Type", "application/xml");
-                                response.setContent(remoteContent);
-
-                            } else {
-                                response = responseForNotFound("404 - The XSD does not exist");
-                            }
-                        } else {
-                            response = responseForNotFound("404 - The XSD does not exist");
-                        }
-                        //== == == == == == WebServices END == == == == ====
+                        response = responseForNotFound("404 - The XSD does not exist");
                     }
                 } else {
                     response = responseForNotFound("404 - Not Found");
