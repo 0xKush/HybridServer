@@ -40,8 +40,6 @@ public class XSDManager extends AbstractManager {
 
             if (resourceParameters.isEmpty()) {
 
-                //Tools.info("resource:xml - without parameters");
-
                 List<XSD> list = this.xsdController.list();
                 Iterator<XSD> it = list.iterator();
                 StringBuilder content = new StringBuilder();
@@ -60,7 +58,7 @@ public class XSDManager extends AbstractManager {
                             + "</li>\n");
                 }
 
-                //== == == == == == WebServices == == == == == == ==
+                //==== Remotes ====
                 Map<ServerConfiguration, List<XSD>> remotes = this.xsdController.remoteList();
 
                 for (Map.Entry<ServerConfiguration, List<XSD>> remote : remotes.entrySet()) {
@@ -79,7 +77,6 @@ public class XSDManager extends AbstractManager {
                         }
                     }
                 }
-                //== == == == == == WebServices END == == == == ====
 
                 content.append("\t</ul>\n" +
                         "\t\n" +
@@ -93,16 +90,12 @@ public class XSDManager extends AbstractManager {
 
             } else {
 
-                //Tools.info("resource:xml - with parameters");
-
                 if (resourceParameters.size() == 1 && resourceParameters.containsKey("uuid")) {
 
                     String uuid = resourceParameters.get("uuid");
                     XSD xsd = xsdController.get(uuid);
 
                     if (xsd != null) {
-
-                        //Tools.info("S200(OK)");
 
                         response.setStatus(HTTPResponseStatus.S200);
                         response.putParameter("Content-Type", "application/xml");
@@ -121,8 +114,6 @@ public class XSDManager extends AbstractManager {
 
     @Override
     public HTTPResponse responseForPOST(Map<String, String> resourceParameters) {
-
-        //Tools.info("Response for Post");
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());

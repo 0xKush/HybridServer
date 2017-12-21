@@ -58,8 +58,6 @@ public class XMLManager extends AbstractManager {
 
             if (resourceParameters.isEmpty()) {
 
-                //Tools.info("resource:xml - without parameters");
-
                 List<XML> list = this.xmlController.list();
                 Iterator<XML> it = list.iterator();
                 StringBuilder content = new StringBuilder();
@@ -80,7 +78,7 @@ public class XMLManager extends AbstractManager {
                 }
 
 
-                //== == == == == == WebServices == == == == == == ==
+                //==== Remotes ====
                 Map<ServerConfiguration, List<XML>> remotes = this.xmlController.remoteList();
 
                 for (Map.Entry<ServerConfiguration, List<XML>> remote : remotes.entrySet()) {
@@ -99,7 +97,6 @@ public class XMLManager extends AbstractManager {
                         }
                     }
                 }
-                //== == == == == == WebServices END == == == == ====
 
                 content.append("\t</ul>\n" +
                         "\t\n" +
@@ -111,8 +108,6 @@ public class XMLManager extends AbstractManager {
 
 
             } else {
-
-                //Tools.info("resource:xml - with parameters");
 
                 if (resourceParameters.size() == 1 && resourceParameters.containsKey("uuid")) {
 
@@ -184,8 +179,6 @@ public class XMLManager extends AbstractManager {
 
 
     public HTTPResponse responseForPOST(Map<String, String> resourceParameters) {
-
-        //Tools.info("Response for Post");
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());

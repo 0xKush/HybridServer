@@ -45,8 +45,6 @@ public class XSLTManager extends AbstractManager {
 
             if (resourceParameters.isEmpty()) {
 
-                //Tools.info("resource:xml - without parameters");
-
                 List<XSLT> list = this.xsltController.list();
                 Iterator<XSLT> it = list.iterator();
                 StringBuilder content = new StringBuilder();
@@ -65,7 +63,7 @@ public class XSLTManager extends AbstractManager {
                             + "</li>\n");
                 }
 
-                //== == == == == == WebServices == == == == == == ==
+                //==== Remotes ====
                 Map<ServerConfiguration, List<XSLT>> remotes = this.xsltController.remoteList();
 
                 for (Map.Entry<ServerConfiguration, List<XSLT>> remote : remotes.entrySet()) {
@@ -78,13 +76,12 @@ public class XSLTManager extends AbstractManager {
                     if (!remoteList.isEmpty()) {
                         while (it.hasNext()) {
                             XSLT doc = it.next();
-                            content.append("<li>\n" + "<a href=\"" + serverConfiguration.getHttpAddress() + "html?uuid=" + doc.getUuid() + "\">" + doc.getUuid() + "</a>"
+                            content.append("<li>\n" + "<a href=\"" + serverConfiguration.getHttpAddress() + "xslt?uuid=" + doc.getUuid() + "\">" + doc.getUuid() + "</a>"
                                     + "</li>\n");
 
                         }
                     }
                 }
-                //== == == == == == WebServices END == == == == ====
 
                 content.append("\t</ul>\n" +
                         "\t\n" +
@@ -97,8 +94,6 @@ public class XSLTManager extends AbstractManager {
 
 
             } else {
-
-                //Tools.info("resource:xml - with parameters");
 
                 if (resourceParameters.size() == 1 && resourceParameters.containsKey("uuid")) {
 
@@ -125,7 +120,6 @@ public class XSLTManager extends AbstractManager {
 
     @Override
     public HTTPResponse responseForPOST(Map<String, String> resourceParameters) {
-        //Tools.info("Response for Post");
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());

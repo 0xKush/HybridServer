@@ -7,6 +7,7 @@ import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
 import es.uvigo.esei.dai.hybridserver.model.entity.wsManager;
 
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +19,9 @@ public class HTMLController {
         return ws;
     }
 
-    public HTMLController(HTMLDAO dao, List<ServerConfiguration> serverList) {
+    public HTMLController(HTMLDAO dao, wsManager wsManager) {
         this.dao = dao;
-        this.ws = new wsManager(serverList);
+        this.ws = wsManager;
     }
 
     public Document get(String uuid) {
@@ -40,13 +41,14 @@ public class HTMLController {
         }
         return doc;
     }
+
     public List<Document> list() {
         return dao.list();
     }
 
     public Map<ServerConfiguration, List<Document>> remoteList() {
 
-        Map<ServerConfiguration, List<Document>> remoteList = null;
+        Map<ServerConfiguration, List<Document>> remoteList = new LinkedHashMap<>();
 
         if (!getWs().getRemoteServices().isEmpty()) {
 

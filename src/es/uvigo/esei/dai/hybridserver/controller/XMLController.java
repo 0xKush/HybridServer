@@ -6,6 +6,7 @@ import es.uvigo.esei.dai.hybridserver.model.dao.xml.XMLDAO;
 import es.uvigo.esei.dai.hybridserver.model.entity.wsManager;
 import es.uvigo.esei.dai.hybridserver.model.entity.xml.XML;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +19,9 @@ public class XMLController {
         return ws;
     }
 
-    public XMLController(XMLDAO dao, List<ServerConfiguration> serverList) {
+    public XMLController(XMLDAO dao, wsManager wsManager) {
         this.dao = dao;
-        this.ws = new wsManager(serverList);
+        this.ws = wsManager;
     }
 
     public XML get(String uuid) {
@@ -48,7 +49,7 @@ public class XMLController {
 
     public Map<ServerConfiguration, List<XML>> remoteList() {
 
-        Map<ServerConfiguration, List<XML>> remoteList = null;
+        Map<ServerConfiguration, List<XML>> remoteList = new LinkedHashMap<>();
 
         if (!getWs().getRemoteServices().isEmpty()) {
 

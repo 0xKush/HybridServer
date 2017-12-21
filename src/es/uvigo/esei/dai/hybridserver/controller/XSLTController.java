@@ -6,6 +6,7 @@ import es.uvigo.esei.dai.hybridserver.model.dao.xslt.XSLTDAO;
 import es.uvigo.esei.dai.hybridserver.model.entity.wsManager;
 import es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLT;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +19,9 @@ public class XSLTController {
         return ws;
     }
 
-    public XSLTController(XSLTDAO dao, List<ServerConfiguration> serverList) {
+    public XSLTController(XSLTDAO dao, wsManager wsManager) {
         this.dao = dao;
-        this.ws = new wsManager(serverList);
+        this.ws = wsManager;
     }
 
     public XSLT get(String uuid) {
@@ -47,7 +48,7 @@ public class XSLTController {
 
     public Map<ServerConfiguration, List<XSLT>> remoteList() {
 
-        Map<ServerConfiguration, List<XSLT>> remoteList = null;
+        Map<ServerConfiguration, List<XSLT>> remoteList = new LinkedHashMap<>();
 
         if (!getWs().getRemoteServices().isEmpty()) {
 

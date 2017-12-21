@@ -87,7 +87,7 @@ public class HTMLManager extends AbstractManager {
                             + "</li>\n");
                 }
 
-                //== == == == == == WebServices == == == == == == ==
+                //==== Remotes ====
                 Map<ServerConfiguration, List<Document>> remotes = this.htmlController.remoteList();
 
                 if (remotes != null) {
@@ -109,7 +109,7 @@ public class HTMLManager extends AbstractManager {
                         }
                     }
                 }
-                //== == == == == == WebServices END == == == == ====
+
 
                 content.append("\t</ul>\n" +
                         "\t\n" +
@@ -122,8 +122,6 @@ public class HTMLManager extends AbstractManager {
 
 
             } else {
-
-                //Tools.info("resource:html - with parameters");
 
                 if (resourceParameters.size() == 1 && resourceParameters.containsKey("uuid")) {
 
@@ -181,7 +179,6 @@ public class HTMLManager extends AbstractManager {
 
     public HTTPResponse responseForPOST(Map<String, String> resourceParameters) {
 
-        //Tools.info("Response for Post");
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
 

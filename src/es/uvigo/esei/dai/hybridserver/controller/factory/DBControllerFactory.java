@@ -11,36 +11,37 @@ import es.uvigo.esei.dai.hybridserver.model.dao.html.HTMLDBDAO;
 import es.uvigo.esei.dai.hybridserver.model.dao.xml.XMLDBDAO;
 import es.uvigo.esei.dai.hybridserver.model.dao.xsd.XSDDBDAO;
 import es.uvigo.esei.dai.hybridserver.model.dao.xslt.XSLTDBDAO;
+import es.uvigo.esei.dai.hybridserver.model.entity.wsManager;
 
 import java.util.List;
 
 public class DBControllerFactory implements ControllerFactory {
 
     private Configuration configuration;
-    private List<ServerConfiguration> serverList;
+    private wsManager ws;
 
     public DBControllerFactory(Configuration configuration) {
         this.configuration = configuration;
-        this.serverList = configuration.getServers();
+        this.ws = new wsManager(configuration.getServers());
     }
 
     @Override
     public HTMLController createHTMLController() {
-        return new HTMLController(new HTMLDBDAO(configuration), serverList);
+        return new HTMLController(new HTMLDBDAO(this.configuration), this.ws);
     }
 
     @Override
     public XMLController createXMLController() {
-        return new XMLController(new XMLDBDAO(configuration), serverList);
+        return new XMLController(new XMLDBDAO(this.configuration), this.ws);
     }
 
     @Override
     public XSDController createXSDController() {
-        return new XSDController(new XSDDBDAO(configuration), serverList);
+        return new XSDController(new XSDDBDAO(this.configuration), this.ws);
     }
 
     @Override
     public XSLTController createXSLTController() {
-        return new XSLTController(new XSLTDBDAO(configuration), serverList);
+        return new XSLTController(new XSLTDBDAO(this.configuration), this.ws);
     }
 }

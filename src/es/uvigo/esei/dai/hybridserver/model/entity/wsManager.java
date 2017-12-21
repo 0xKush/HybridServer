@@ -2,20 +2,13 @@ package es.uvigo.esei.dai.hybridserver.model.entity;
 
 import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.hbSEI;
-import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
-import es.uvigo.esei.dai.hybridserver.model.entity.xml.XML;
-import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
-import es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLT;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebServiceException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class wsManager {
     private List<ServerConfiguration> serverList;
@@ -24,7 +17,7 @@ public class wsManager {
     public wsManager(List<ServerConfiguration> serverList) {
 
         this.serverList = serverList;
-        this.remoteServices = new HashMap<>();
+        this.remoteServices = new LinkedHashMap<>();
 
         if (this.serverList != null) {
             for (ServerConfiguration server : this.serverList) {
@@ -39,10 +32,6 @@ public class wsManager {
                 } catch (WebServiceException | MalformedURLException e) {/*server down*/ }
             }
         }
-    }
-
-    public List<ServerConfiguration> getServerList() {
-        return serverList;
     }
 
     public Map<ServerConfiguration, hbSEI> getRemoteServices() {

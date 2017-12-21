@@ -6,6 +6,7 @@ import es.uvigo.esei.dai.hybridserver.model.dao.xsd.XSDDAO;
 import es.uvigo.esei.dai.hybridserver.model.entity.wsManager;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,12 +20,30 @@ public class XSDController {
         return ws;
     }
 
-    public XSDController(XSDDAO dao, List<ServerConfiguration> serverList) {
+    public XSDController(XSDDAO dao, wsManager wsManager) {
         this.dao = dao;
-        this.ws = new wsManager(serverList);
+        this.ws = wsManager;
     }
 
     public XSD get(String uuid) {
+        XSD doc;
+        doc = dao.get(uuid);
+
+        if (doc != null) {
+            return doc;
+        } else {
+            if (!getWs().getRemoteServices().isEmpty()) {
+                for (Map.Entry<ServerConfiguration, hbSEI> server : getWs().getRemoteServices().entrySet()) {
+                    doc = server.getValue().getXSD(uuid);
+                    if (doc != null)
+                        break;
+                }
+            }
+        }
+        return doc;
+    }
+
+    public XSD getAssociatedXSD(String uuid) {
         XSD doc;
         doc = dao.get(uuid);
 
@@ -48,7 +67,7 @@ public class XSDController {
 
     public Map<ServerConfiguration, List<XSD>> remoteList() {
 
-        Map<ServerConfiguration, List<XSD>> remoteList = null;
+        Map<ServerConfiguration, List<XSD>> remoteList = new LinkedHashMap<>();
 
         if (!getWs().getRemoteServices().isEmpty()) {
 
