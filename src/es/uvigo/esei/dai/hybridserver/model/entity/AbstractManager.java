@@ -1,34 +1,20 @@
 package es.uvigo.esei.dai.hybridserver.model.entity;
-
-import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
-import es.uvigo.esei.dai.hybridserver.hbSEI;
-
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
-import javax.xml.ws.WebServiceException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractManager {
 
 
-    public abstract HTTPResponse responseForGET(Map<String, String> resourceParameters);
+    public abstract HTTPResponse GET(Map<String, String> resourceParameters);
 
-    public abstract HTTPResponse responseForPOST(Map<String, String> resourceParameters);
+    public abstract HTTPResponse POST(Map<String, String> resourceParameters);
 
-    public abstract HTTPResponse responseForDELETE(Map<String, String> resourceParameters);
+    public abstract HTTPResponse DELETE(Map<String, String> resourceParameters);
 
 
-    public static HTTPResponse responseForBadRequest(String content) {
-
-        //Tools.info("S400(Bad Request)");
+    public static HTTPResponse S400(String content) {
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
@@ -40,9 +26,7 @@ public abstract class AbstractManager {
         return response;
     }
 
-    public static HTTPResponse responseForNotFound(String content) {
-
-        //Tools.info("S404(Not Found)");
+    public static HTTPResponse S404(String content) {
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
@@ -54,15 +38,25 @@ public abstract class AbstractManager {
         return response;
     }
 
-    public static HTTPResponse responseForInternalServerError(String content) {
-
-        //Tools.info("S500(Internal Server Error)");
+    public static HTTPResponse S500(String content) {
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
 
         response.setStatus(HTTPResponseStatus.S500);
         response.putParameter("Content-Type", "text/html");
+        response.setContent(content);
+
+        return response;
+    }
+
+    public static HTTPResponse S200(String content, String contentType) {
+
+        HTTPResponse response = new HTTPResponse();
+        response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
+
+        response.setStatus(HTTPResponseStatus.S200);
+        response.putParameter("Content-Type", contentType);
         response.setContent(content);
 
         return response;

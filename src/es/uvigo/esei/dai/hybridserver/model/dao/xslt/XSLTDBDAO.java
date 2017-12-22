@@ -38,6 +38,7 @@ public class XSLTDBDAO implements XSLTDAO {
                 if (result.next()) {
                     xslt = new XSLT(result.getString("uuid"), result.getString("content"), result.getString("xsd"));
                 }
+                db.close();
             } catch (SQLException e) {
                 throw new RuntimeException("The XSLT could not be retrieved.");
 
@@ -60,6 +61,7 @@ public class XSLTDBDAO implements XSLTDAO {
 
             if (rows != 1)
                 throw new RuntimeException("The XSLT could not be added.");
+            db.close();
         } catch (SQLException e) {
             throw new RuntimeException("DB connection error" + e.getMessage());
         }
@@ -75,6 +77,7 @@ public class XSLTDBDAO implements XSLTDAO {
 
             if (rows != 1)
                 throw new RuntimeException("The XSLT could not be deleted.");
+            db.close();
         } catch (SQLException e) {
             throw new RuntimeException("DB connection error" + e.getMessage());
         }
@@ -92,6 +95,7 @@ public class XSLTDBDAO implements XSLTDAO {
                     XSLT xslt = new XSLT(result.getString("uuid"), result.getString("content"), result.getString("xsd"));
                     xsltList.add(xslt);
                 }
+                db.close();
 
             } catch (SQLException e) {
                 throw new RuntimeException("The XSLTs could not be retrieved.");

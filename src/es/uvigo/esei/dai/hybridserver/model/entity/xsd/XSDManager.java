@@ -3,9 +3,7 @@ package es.uvigo.esei.dai.hybridserver.model.entity.xsd;
 import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.XSDController;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
-import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
-import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
 
 import java.util.Iterator;
@@ -19,22 +17,22 @@ public class XSDManager extends AbstractManager {
     private XSDController xsdController;
 
     public XSDManager(ControllerFactory factory) {
-        if (factory != null) {
+
+        if (factory != null)
             this.xsdController = factory.createXSDController();
-        } else {
+        else
             this.xsdController = null;
-        }
     }
 
 
     @Override
-    public HTTPResponse responseForGET(Map<String, String> resourceParameters) {
+    public HTTPResponse GET(Map<String, String> resourceParameters) {
 
-        HTTPResponse response = new HTTPResponse();
-        response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
+        HTTPResponse response;
 
         if (this.xsdController == null) {
-            response = responseForInternalServerError("500 - Internal Server Error");
+
+            response = S500("500 - Internal Server Error");
 
         } else {
 
@@ -69,6 +67,7 @@ public class XSDManager extends AbstractManager {
                     content.append("\n<h1>" + serverConfiguration.getName() + "</h1>\n");
 
                     if (!remoteList.isEmpty()) {
+
                         while (it.hasNext()) {
                             XSD doc = it.next();
                             content.append("<li>\n" + "<a href=\"" + serverConfiguration.getHttpAddress() + "xsd?uuid=" + doc.getUuid() + "\">" + doc.getUuid() + "</a>"
@@ -83,10 +82,7 @@ public class XSDManager extends AbstractManager {
                         "</body>\n" +
                         "</html>");
 
-                response.setStatus(HTTPResponseStatus.S200);
-                response.putParameter("Content-Type", "text/html");
-                response.setContent(content.toString());
-
+                response = S200(content.toString(), "text/html");
 
             } else {
 
@@ -95,17 +91,13 @@ public class XSDManager extends AbstractManager {
                     String uuid = resourceParameters.get("uuid");
                     XSD xsd = xsdController.get(uuid);
 
-                    if (xsd != null) {
+                    if (xsd != null)
+                        response = S200(xsd.getContent(), "application/xml");
+                    else
+                        response = S404("404 - The XSD does not exist");
 
-                        response.setStatus(HTTPResponseStatus.S200);
-                        response.putParameter("Content-Type", "application/xml");
-                        response.setContent(xsd.getContent());
-
-                    } else {
-                        response = responseForNotFound("404 - The XSD does not exist");
-                    }
                 } else {
-                    response = responseForNotFound("404 - Not Found");
+                    response = S404("404 - Not Found");
                 }
             }
         }
@@ -113,31 +105,28 @@ public class XSDManager extends AbstractManager {
     }
 
     @Override
-    public HTTPResponse responseForPOST(Map<String, String> resourceParameters) {
+    public HTTPResponse POST(Map<String, String> resourceParameters) {
 
-        HTTPResponse response = new HTTPResponse();
-        response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
+        HTTPResponse response;
 
         UUID randomUuid = UUID.randomUUID();
         String uuid = randomUuid.toString();
         String content;
 
         if (this.xsdController == null) {
-            response = responseForInternalServerError("500 - Internal Server Error");
+
+            response = S500("500 - Internal Server Error");
+
         } else {
 
             if (resourceParameters.containsKey("xsd")) {
 
                 content = resourceParameters.get("xsd");
                 this.xsdController.add(uuid, content);
-
-                response.setStatus(HTTPResponseStatus.S200);
-                response.putParameter("Content-Type", "text/html");
-                response.setContent("<a href=\"xsd?uuid=" + uuid.toString() + "\">" + uuid.toString() + "</a>");
-
+                response = S200("<a href=\"xsd?uuid=" + uuid.toString() + "\">" + uuid.toString() + "</a>", "text/html");
 
             } else {
-                return responseForBadRequest("400 - Bad Request");
+                return S400("400 - Bad Request");
             }
         }
 
@@ -145,14 +134,14 @@ public class XSDManager extends AbstractManager {
     }
 
     @Override
-    public HTTPResponse responseForDELETE(Map<String, String> resourceParameters) {
+    public HTTPResponse DELETE(Map<String, String> resourceParameters) {
 
-        HTTPResponse response = new HTTPResponse();
-        response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
+        HTTPResponse response;
         String uuid;
 
         if (this.xsdController == null) {
-            response = responseForInternalServerError("500 - Internal Server Error");
+
+            response = S500("500 - Internal Server Error");
 
         } else {
 
@@ -163,15 +152,13 @@ public class XSDManager extends AbstractManager {
                 if (this.xsdController.get(uuid) != null) {
 
                     this.xsdController.delete(uuid);
-                    response.setStatus(HTTPResponseStatus.S200);
-                    response.putParameter("Content-Type", "text/html");
-                    response.setContent("The XSD has been deleted");
+                    response = S200("The XSD has been deleted", "text/html");
 
                 } else {
-                    response = responseForNotFound("404 - The XSD does not exist");
+                    response = S404("404 - The XSD does not exist");
                 }
             } else {
-                response = responseForBadRequest("400 - Invalid parameter");
+                response = S400("400 - Invalid parameter");
             }
         }
         return response;

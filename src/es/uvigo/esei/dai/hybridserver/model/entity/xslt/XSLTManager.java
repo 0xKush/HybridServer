@@ -3,10 +3,7 @@ package es.uvigo.esei.dai.hybridserver.model.entity.xslt;
 import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.XSLTController;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
-
-import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
-import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
 
@@ -21,21 +18,22 @@ public class XSLTManager extends AbstractManager {
     private XSLTController xsltController;
 
     public XSLTManager(ControllerFactory factory) {
-        if (factory != null) {
+
+        if (factory != null)
             this.xsltController = factory.createXSLTController();
-        } else {
+        else
             this.xsltController = null;
-        }
     }
 
 
     @Override
-    public HTTPResponse responseForGET(Map<String, String> resourceParameters) {
-        HTTPResponse response = new HTTPResponse();
-        response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
+    public HTTPResponse GET(Map<String, String> resourceParameters) {
+        HTTPResponse response;
+
 
         if (this.xsltController == null) {
-            response = responseForInternalServerError("500 - Internal Server Error");
+
+            response = S500("500 - Internal Server Error");
 
         } else {
 
@@ -70,6 +68,7 @@ public class XSLTManager extends AbstractManager {
                     content.append("\n<h1>" + serverConfiguration.getName() + "</h1>\n");
 
                     if (!remoteList.isEmpty()) {
+
                         while (it.hasNext()) {
                             XSLT doc = it.next();
                             content.append("<li>\n" + "<a href=\"" + serverConfiguration.getHttpAddress() + "xslt?uuid=" + doc.getUuid() + "\">" + doc.getUuid() + "</a>"
@@ -84,10 +83,7 @@ public class XSLTManager extends AbstractManager {
                         "</body>\n" +
                         "</html>");
 
-                response.setStatus(HTTPResponseStatus.S200);
-                response.putParameter("Content-Type", "text/html");
-                response.setContent(content.toString());
-
+                response = S200(content.toString(), "text/html");
 
             } else {
 
@@ -96,17 +92,13 @@ public class XSLTManager extends AbstractManager {
                     String uuid = resourceParameters.get("uuid");
                     XSLT xslt = xsltController.get(uuid);
 
-                    if (xslt != null) {
+                    if (xslt != null)
+                        response = S200(xslt.getContent(), "application/xml");
+                    else
+                        response = S404("404 - The XSLT does not exist");
 
-                        response.setStatus(HTTPResponseStatus.S200);
-                        response.putParameter("Content-Type", "application/xml");
-                        response.setContent(xslt.getContent());
-
-                    } else {
-                        response = responseForNotFound("404 - The XSLT does not exist");
-                    }
                 } else {
-                    response = responseForNotFound("404 - Not Found");
+                    response = S404("404 - Not Found");
                 }
             }
         }
@@ -115,10 +107,9 @@ public class XSLTManager extends AbstractManager {
     }
 
     @Override
-    public HTTPResponse responseForPOST(Map<String, String> resourceParameters) {
+    public HTTPResponse POST(Map<String, String> resourceParameters) {
 
-        HTTPResponse response = new HTTPResponse();
-        response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
+        HTTPResponse response;
 
         UUID randomUuid = UUID.randomUUID();
         String uuid = randomUuid.toString();
@@ -126,7 +117,9 @@ public class XSLTManager extends AbstractManager {
         XSD xsd;
 
         if (this.xsltController == null) {
-            response = responseForInternalServerError("500 - Internal Server Error");
+
+            response = S500("500 - Internal Server Error");
+
         } else {
 
             if (resourceParameters.containsKey("xslt") && resourceParameters.containsKey("xsd")) {
@@ -136,31 +129,27 @@ public class XSLTManager extends AbstractManager {
                     content = resourceParameters.get("xslt");
                     this.xsltController.add(uuid, content, xsd.getUuid());
 
-                    response.setStatus(HTTPResponseStatus.S200);
-                    response.putParameter("Content-Type", "text/html");
-                    response.setContent("<a href=\"xslt?uuid=" + uuid.toString() + "\">" + uuid.toString() + "</a>");
+                    response = S200("<a href=\"xslt?uuid=" + uuid.toString() + "\">" + uuid.toString() + "</a>", "text/html");
 
                 } else {
-                    return responseForNotFound("404 - Not Found");
+                    return S404("404 - Not Found");
                 }
 
-
             } else
-                return responseForBadRequest("400 - Bad Request");
+                return S400("400 - Bad Request");
         }
-
         return response;
     }
 
     @Override
-    public HTTPResponse responseForDELETE(Map<String, String> resourceParameters) {
+    public HTTPResponse DELETE(Map<String, String> resourceParameters) {
 
-        HTTPResponse response = new HTTPResponse();
-        response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
+        HTTPResponse response;
         String uuid;
 
         if (this.xsltController == null) {
-            response = responseForInternalServerError("500 - Internal Server Error");
+
+            response = S500("500 - Internal Server Error");
 
         } else {
 
@@ -171,15 +160,13 @@ public class XSLTManager extends AbstractManager {
                 if (this.xsltController.get(uuid) != null) {
 
                     this.xsltController.delete(uuid);
-                    response.setStatus(HTTPResponseStatus.S200);
-                    response.putParameter("Content-Type", "text/html");
-                    response.setContent("The XSLT has been deleted");
+                    response = S200("The XSLT has been deleted", "text/html");
 
                 } else {
-                    response = responseForNotFound("404 - The XSLT does not exist");
+                    response = S404("404 - The XSLT does not exist");
                 }
             } else {
-                response = responseForBadRequest("400 - Invalid parameter");
+                response = S400("400 - Invalid parameter");
             }
         }
         return response;

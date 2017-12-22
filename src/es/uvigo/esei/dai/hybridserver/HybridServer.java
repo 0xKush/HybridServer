@@ -76,11 +76,11 @@ public class HybridServer {
 
 
         /*
-        Tools.info("RUNNING" + "\n" +
-                "Port: " + servicePort + "\n" +
-                "numClients: " + numClients + "\n" +
-                "dbUrl: " + dbUrl + "\n" +
-                "dbUser: " + dbUser + "\n" +
+        Tools.info("RUNNING" + "\S404" +
+                "Port: " + servicePort + "\S404" +
+                "numClients: " + numClients + "\S404" +
+                "dbUrl: " + dbUrl + "\S404" +
+                "dbUser: " + dbUser + "\S404" +
                 "dbPass: " + dbPass);
 
         */

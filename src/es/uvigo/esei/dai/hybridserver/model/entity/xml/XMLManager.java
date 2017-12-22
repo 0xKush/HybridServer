@@ -1,14 +1,12 @@
 package es.uvigo.esei.dai.hybridserver.model.entity.xml;
+
 import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.XMLController;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
-import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
-import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
 import es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLT;
-import es.uvigo.esei.dai.hybridserver.utils.Tools;
 
 import javax.xml.transform.TransformerException;
 import java.util.Iterator;
@@ -25,23 +23,21 @@ public class XMLManager extends AbstractManager {
 
     public XMLManager(ControllerFactory factory) {
 
-        if (factory != null) {
+        if (factory != null)
             this.xmlController = factory.createXMLController();
-
-        } else {
+        else
             this.xmlController = null;
-        }
+
     }
 
 
-    public HTTPResponse responseForGET(Map<String, String> resourceParameters) {
+    public HTTPResponse GET(Map<String, String> resourceParameters) {
 
-        HTTPResponse response = new HTTPResponse();
-        response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
-
+        HTTPResponse response;
 
         if (this.xmlController == null) {
-            response = responseForInternalServerError("500 - Internal Server Error");
+
+            response = S500("500 - Internal Server Error");
 
         } else {
 
@@ -78,6 +74,7 @@ public class XMLManager extends AbstractManager {
                     content.append("\n<h1>" + serverConfiguration.getName() + "</h1>\n");
 
                     if (!remoteList.isEmpty()) {
+
                         while (it.hasNext()) {
                             XML doc = it.next();
                             content.append("<li>\n" + "<a href=\"" + serverConfiguration.getHttpAddress() + "xml?uuid=" + doc.getUuid() + "\">" + doc.getUuid() + "</a>"
@@ -91,9 +88,7 @@ public class XMLManager extends AbstractManager {
                         "\t\n" +
                         "</body>\n" +
                         "</html>");
-                response.setStatus(HTTPResponseStatus.S200);
-                response.putParameter("Content-Type", "text/html");
-                response.setContent(content.toString());
+                response = S200(content.toString(), "text/html");
 
 
             } else {
@@ -105,12 +100,10 @@ public class XMLManager extends AbstractManager {
 
                     if (xml != null) {
 
-                        response.setStatus(HTTPResponseStatus.S200);
-                        response.putParameter("Content-Type", "application/xml");
-                        response.setContent(xml.getContent());
+                        response = S200(xml.getContent(), "application/xml");
 
                     } else {
-                        response = responseForNotFound("404 - The XML does not exist");
+                        response = S404("404 - The XML does not exist");
                     }
                 } else if (resourceParameters.size() == 2 && resourceParameters.containsKey("uuid") && resourceParameters.containsKey("xslt")) {
 
@@ -131,38 +124,35 @@ public class XMLManager extends AbstractManager {
 
                                 try {
                                     boolean validated = validateWithXSD(xml, xsd);
-                                    if (validated) {
-                                        String transformedXML = transform(xml, xslt);
 
-                                        response.setStatus(HTTPResponseStatus.S200);
-                                        response.putParameter("Content-Type", "text/html");
-                                        response.setContent(transformedXML);
+                                    if (validated) {
+
+                                        String transformedXML = transform(xml, xslt);
+                                        response = S200(transformedXML, "text/html");
+
                                     } else {
-                                        response = responseForBadRequest("400 - The XML could not be validated");
+                                        response = S400("400 - The XML could not be validated");
                                     }
 
                                 } catch (TransformerException e) {
                                     e.printStackTrace();
-                                    response = responseForInternalServerError("500 - The XML could not be transformed");
+                                    response = S500("500 - The XML could not be transformed");
                                 }
 
                             } else {
-                                response = responseForBadRequest("400 - The XSD does not exist");
-                                Tools.info("400 - The XSD does not exist");
+                                response = S400("400 - The XSD does not exist");
                             }
 
                         } else {
-                            response = responseForNotFound("404 - The XSLT asociated does not exist");
-                            Tools.info("404 - The XSLT asociated does not exist");
+                            response = S404("404 - The XSLT asociated does not exist");
                         }
 
                     } else {
-                        response = responseForNotFound("404 - The XML does not exist");
-                        Tools.info("404 - The XML does not exist");
+                        response = S404("404 - The XML does not exist");
                     }
 
                 } else {
-                    response = responseForNotFound("404 - Not Found");
+                    response = S404("404 - Not Found");
                 }
             }
         }
@@ -170,10 +160,9 @@ public class XMLManager extends AbstractManager {
     }
 
 
-    public HTTPResponse responseForPOST(Map<String, String> resourceParameters) {
+    public HTTPResponse POST(Map<String, String> resourceParameters) {
 
-        HTTPResponse response = new HTTPResponse();
-        response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
+        HTTPResponse response;
 
         UUID randomUuid = UUID.randomUUID();
         String uuid = randomUuid.toString();
@@ -181,7 +170,9 @@ public class XMLManager extends AbstractManager {
 
 
         if (this.xmlController == null) {
-            response = responseForInternalServerError("500 - Internal Server Error");
+
+            response = S500("500 - Internal Server Error");
+
         } else {
 
             if (resourceParameters.containsKey("xml")) {
@@ -189,26 +180,24 @@ public class XMLManager extends AbstractManager {
                 content = resourceParameters.get("xml");
                 this.xmlController.add(uuid, content);
 
-                response.setStatus(HTTPResponseStatus.S200);
-                response.putParameter("Content-Type", "text/html");
-                response.setContent("<a href=\"xml?uuid=" + uuid.toString() + "\">" + uuid.toString() + "</a>");
+                response = S200("<a href=\"xml?uuid=" + uuid.toString() + "\">" + uuid.toString() + "</a>", "text/html");
 
             } else {
-                return responseForBadRequest("400 - Bad Request");
+                return S400("400 - Bad Request");
             }
         }
 
         return response;
     }
 
-    public HTTPResponse responseForDELETE(Map<String, String> resourceParameters) {
+    public HTTPResponse DELETE(Map<String, String> resourceParameters) {
 
-        HTTPResponse response = new HTTPResponse();
-        response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());
+        HTTPResponse response;
         String uuid;
 
         if (this.xmlController == null) {
-            response = responseForInternalServerError("500 - Internal Server Error");
+
+            response = S500("500 - Internal Server Error");
 
         } else {
 
@@ -219,15 +208,13 @@ public class XMLManager extends AbstractManager {
                 if (this.xmlController.get(uuid) != null) {
 
                     this.xmlController.delete(uuid);
-                    response.setStatus(HTTPResponseStatus.S200);
-                    response.putParameter("Content-Type", "text/html");
-                    response.setContent("The XML has been deleted");
+                    response = S200("The XML has been deleted", "text/html");
 
                 } else {
-                    response = responseForNotFound("404 - The XML does not exist");
+                    response = S404("404 - The XML does not exist");
                 }
             } else {
-                response = responseForBadRequest("400 - Invalid parameter");
+                response = S400("400 - Invalid parameter");
             }
         }
         return response;

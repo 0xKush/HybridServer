@@ -58,15 +58,15 @@ public class ServiceThread implements Runnable {
 
                     case "html":
                         if (method.equals("GET"))
-                            response = HTMLManager.responseForGET(resourceParameters);
+                            response = HTMLManager.GET(resourceParameters);
 
                         else if (method.equals("POST"))
-                            response = HTMLManager.responseForPOST(resourceParameters);
+                            response = HTMLManager.POST(resourceParameters);
 
                         else if (method.equals("DELETE"))
-                            response = HTMLManager.responseForDELETE(resourceParameters);
+                            response = HTMLManager.DELETE(resourceParameters);
                         else
-                            response = AbstractManager.responseForBadRequest("400 - Bad Request");
+                            response = AbstractManager.S400("400 - Bad Request");
 
 
                         response.print(ioManager.getWriter());
@@ -74,15 +74,15 @@ public class ServiceThread implements Runnable {
 
                     case "xml":
                         if (method.equals("GET"))
-                            response = XMLManager.responseForGET(resourceParameters);
+                            response = XMLManager.GET(resourceParameters);
 
                         else if (method.equals("POST"))
-                            response = XMLManager.responseForPOST(resourceParameters);
+                            response = XMLManager.POST(resourceParameters);
 
                         else if (method.equals("DELETE"))
-                            response = XMLManager.responseForDELETE(resourceParameters);
+                            response = XMLManager.DELETE(resourceParameters);
                         else
-                            response = AbstractManager.responseForBadRequest("400 - Bad Request");
+                            response = AbstractManager.S400("400 - Bad Request");
 
 
                         response.print(ioManager.getWriter());
@@ -90,15 +90,15 @@ public class ServiceThread implements Runnable {
 
                     case "xsd":
                         if (method.equals("GET"))
-                            response = XSDManager.responseForGET(resourceParameters);
+                            response = XSDManager.GET(resourceParameters);
 
                         else if (method.equals("POST"))
-                            response = XSDManager.responseForPOST(resourceParameters);
+                            response = XSDManager.POST(resourceParameters);
 
                         else if (method.equals("DELETE"))
-                            response = XSDManager.responseForDELETE(resourceParameters);
+                            response = XSDManager.DELETE(resourceParameters);
                         else
-                            response = AbstractManager.responseForBadRequest("400 - Bad Request");
+                            response = AbstractManager.S400("400 - Bad Request");
 
 
                         response.print(ioManager.getWriter());
@@ -106,33 +106,33 @@ public class ServiceThread implements Runnable {
 
                     case "xslt":
                         if (method.equals("GET"))
-                            response = XSLTManager.responseForGET(resourceParameters);
+                            response = XSLTManager.GET(resourceParameters);
 
                         else if (method.equals("POST"))
-                            response = XSLTManager.responseForPOST(resourceParameters);
+                            response = XSLTManager.POST(resourceParameters);
 
                         else if (method.equals("DELETE"))
-                            response = XSLTManager.responseForDELETE(resourceParameters);
+                            response = XSLTManager.DELETE(resourceParameters);
                         else
-                            response = AbstractManager.responseForBadRequest("400 - Bad Request");
+                            response = AbstractManager.S400("400 - Bad Request");
 
 
                         response.print(ioManager.getWriter());
                         break;
 
                     default:
-                        response = AbstractManager.responseForBadRequest("400 - Bad Request");
+                        response = AbstractManager.S400("400 - Bad Request");
                         response.print(ioManager.getWriter());
                         break;
                 }
 
             } catch (HTTPException e) {
-                response = AbstractManager.responseForBadRequest("400 - Bad Request");
+                response = AbstractManager.S400("400 - Bad Request");
                 response.print(ioManager.getWriter());
                 e.printStackTrace();
 
             } catch (Exception e) {
-                response = AbstractManager.responseForInternalServerError("500 - Internal Server Error");
+                response = AbstractManager.S500("500 - Internal Server Error");
                 response.print(ioManager.getWriter());
                 e.printStackTrace();
             }
