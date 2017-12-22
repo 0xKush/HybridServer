@@ -18,30 +18,28 @@ import java.util.List;
 public class DBControllerFactory implements ControllerFactory {
 
     private Configuration configuration;
-    private wsManager ws;
 
     public DBControllerFactory(Configuration configuration) {
         this.configuration = configuration;
-        this.ws = new wsManager(configuration.getServers());
     }
 
     @Override
     public HTMLController createHTMLController() {
-        return new HTMLController(new HTMLDBDAO(this.configuration), this.ws);
+        return new HTMLController(new HTMLDBDAO(this.configuration), this.configuration.getServers());
     }
 
     @Override
     public XMLController createXMLController() {
-        return new XMLController(new XMLDBDAO(this.configuration), new XSLTDBDAO(this.configuration), new XSDDBDAO(this.configuration), this.ws);
+        return new XMLController(new XMLDBDAO(this.configuration), new XSLTDBDAO(this.configuration), new XSDDBDAO(this.configuration), this.configuration.getServers());
     }
 
     @Override
     public XSDController createXSDController() {
-        return new XSDController(new XSDDBDAO(this.configuration), this.ws);
+        return new XSDController(new XSDDBDAO(this.configuration), this.configuration.getServers());
     }
 
     @Override
     public XSLTController createXSLTController() {
-        return new XSLTController(new XSLTDBDAO(this.configuration), new XSDDBDAO(this.configuration), this.ws);
+        return new XSLTController(new XSLTDBDAO(this.configuration), new XSDDBDAO(this.configuration), this.configuration.getServers());
     }
 }

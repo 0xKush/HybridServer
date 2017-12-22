@@ -7,6 +7,7 @@ import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
+import es.uvigo.esei.dai.hybridserver.utils.Tools;
 
 import java.util.Iterator;
 import java.util.List;
@@ -30,7 +31,6 @@ public class HTMLManager extends AbstractManager {
     }
 
     public HTTPResponse responseForRoot() {
-        //Tools.info("Response for root");
 
         HTTPResponse response = new HTTPResponse();
         response.setVersion(HTTPHeaders.HTTP_1_1.getHeader());

@@ -25,11 +25,11 @@ public class XMLController {
         return ws;
     }
 
-    public XMLController(XMLDAO dao, XSLTDAO xsltDao, XSDDAO xsdDao, wsManager wsManager) {
+    public XMLController(XMLDAO dao, XSLTDAO xsltDao, XSDDAO xsdDao, List<ServerConfiguration> serverList) {
         this.dao = dao;
         this.xsltDao = xsltDao;
         this.xsdDao = xsdDao;
-        this.ws = wsManager;
+        this.ws = new wsManager(serverList);
     }
 
     public XML get(String uuid) {

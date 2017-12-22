@@ -1,6 +1,4 @@
 package es.uvigo.esei.dai.hybridserver.model.entity.xml;
-
-import com.sun.deploy.uitoolkit.ToolkitStore;
 import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.XMLController;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
@@ -11,12 +9,8 @@ import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
 import es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLT;
 import es.uvigo.esei.dai.hybridserver.utils.Tools;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;

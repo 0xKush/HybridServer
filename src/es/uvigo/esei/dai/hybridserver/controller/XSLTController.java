@@ -23,10 +23,10 @@ public class XSLTController {
         return ws;
     }
 
-    public XSLTController(XSLTDAO dao, XSDDAO xsdDao, wsManager wsManager) {
+    public XSLTController(XSLTDAO dao, XSDDAO xsdDao, List<ServerConfiguration> serverList) {
         this.dao = dao;
         this.xsdDao = xsdDao;
-        this.ws = wsManager;
+        this.ws = new wsManager(serverList);
     }
 
     public XSLT get(String uuid) {

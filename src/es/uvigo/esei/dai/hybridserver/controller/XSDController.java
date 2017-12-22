@@ -20,9 +20,9 @@ public class XSDController {
         return ws;
     }
 
-    public XSDController(XSDDAO dao, wsManager wsManager) {
+    public XSDController(XSDDAO dao, List<ServerConfiguration> serverList) {
         this.dao = dao;
-        this.ws = wsManager;
+        this.ws = new wsManager(serverList);
     }
 
     public XSD get(String uuid) {
