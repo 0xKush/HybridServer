@@ -3,8 +3,12 @@ package es.uvigo.esei.dai.hybridserver.controller;
 import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.hbSEI;
 import es.uvigo.esei.dai.hybridserver.model.dao.xml.XMLDAO;
+import es.uvigo.esei.dai.hybridserver.model.dao.xsd.XSDDAO;
+import es.uvigo.esei.dai.hybridserver.model.dao.xslt.XSLTDAO;
 import es.uvigo.esei.dai.hybridserver.model.entity.wsManager;
 import es.uvigo.esei.dai.hybridserver.model.entity.xml.XML;
+import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
+import es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLT;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,14 +17,18 @@ import java.util.Map;
 public class XMLController {
 
     private XMLDAO dao;
+    private XSLTDAO xsltDao;
+    private XSDDAO xsdDao;
     private wsManager ws;
 
     public wsManager getWs() {
         return ws;
     }
 
-    public XMLController(XMLDAO dao, wsManager wsManager) {
+    public XMLController(XMLDAO dao, XSLTDAO xsltDao, XSDDAO xsdDao, wsManager wsManager) {
         this.dao = dao;
+        this.xsltDao = xsltDao;
+        this.xsdDao = xsdDao;
         this.ws = wsManager;
     }
 
@@ -35,6 +43,42 @@ public class XMLController {
             if (!getWs().getRemoteServices().isEmpty()) {
                 for (Map.Entry<ServerConfiguration, hbSEI> server : getWs().getRemoteServices().entrySet()) {
                     doc = server.getValue().getXML(uuid);
+                    if (doc != null)
+                        break;
+                }
+            }
+        }
+        return doc;
+    }
+
+    public XSD getXSD(String uuid) {
+        XSD doc;
+        doc = xsdDao.get(uuid);
+
+        if (doc != null) {
+            return doc;
+        } else {
+            if (!getWs().getRemoteServices().isEmpty()) {
+                for (Map.Entry<ServerConfiguration, hbSEI> server : getWs().getRemoteServices().entrySet()) {
+                    doc = server.getValue().getXSD(uuid);
+                    if (doc != null)
+                        break;
+                }
+            }
+        }
+        return doc;
+    }
+
+    public XSLT getXSLT(String uuid) {
+        XSLT doc;
+        doc = xsltDao.get(uuid);
+
+        if (doc != null) {
+            return doc;
+        } else {
+            if (!getWs().getRemoteServices().isEmpty()) {
+                for (Map.Entry<ServerConfiguration, hbSEI> server : getWs().getRemoteServices().entrySet()) {
+                    doc = server.getValue().getXSLT(uuid);
                     if (doc != null)
                         break;
                 }

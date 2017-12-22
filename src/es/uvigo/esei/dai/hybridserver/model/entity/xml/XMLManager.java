@@ -1,9 +1,8 @@
 package es.uvigo.esei.dai.hybridserver.model.entity.xml;
 
+import com.sun.deploy.uitoolkit.ToolkitStore;
 import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.XMLController;
-import es.uvigo.esei.dai.hybridserver.controller.XSDController;
-import es.uvigo.esei.dai.hybridserver.controller.XSLTController;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.http.HTTPHeaders;
 import es.uvigo.esei.dai.hybridserver.http.HTTPResponse;
@@ -11,7 +10,9 @@ import es.uvigo.esei.dai.hybridserver.http.HTTPResponseStatus;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
 import es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLT;
+import es.uvigo.esei.dai.hybridserver.utils.Tools;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -27,20 +28,14 @@ import static es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLTUtils.transfo
 public class XMLManager extends AbstractManager {
 
     private XMLController xmlController;
-    private XSDController xsdController;
-    private XSLTController xsltController;
 
     public XMLManager(ControllerFactory factory) {
 
         if (factory != null) {
             this.xmlController = factory.createXMLController();
-            this.xsdController = factory.createXSDController();
-            this.xsltController = factory.createXSLTController();
 
         } else {
             this.xmlController = null;
-            this.xsdController = null;
-            this.xsltController = null;
         }
     }
 
@@ -131,26 +126,26 @@ public class XMLManager extends AbstractManager {
                     if (xml != null) {
 
                         String uuidXSLT = resourceParameters.get("xslt");
-                        XSLT xslt = xsltController.get(uuidXSLT);
+                        XSLT xslt = xmlController.getXSLT(uuidXSLT);
 
                         if (xslt != null) {
 
                             String uuidXSD = xslt.getXsd();
-                            XSD xsd = xsdController.get(uuidXSD);
+                            XSD xsd = xmlController.getXSD(uuidXSD);
 
                             if (xsd != null) {
 
                                 try {
-                                    validateWithXSD(xml, xsd);
-                                    String transformedXML = transform(xml, xslt);
+                                    boolean validated = validateWithXSD(xml, xsd);
+                                    if (validated) {
+                                        String transformedXML = transform(xml, xslt);
 
-                                    response.setStatus(HTTPResponseStatus.S200);
-                                    response.putParameter("Content-Type", "text/html");
-                                    response.setContent(transformedXML);
-
-                                } catch (ParserConfigurationException | IOException | SAXException e) {
-                                    e.printStackTrace();
-                                    response = responseForBadRequest("400 - The XML could not be validated");
+                                        response.setStatus(HTTPResponseStatus.S200);
+                                        response.putParameter("Content-Type", "text/html");
+                                        response.setContent(transformedXML);
+                                    } else {
+                                        response = responseForBadRequest("400 - The XML could not be validated");
+                                    }
 
                                 } catch (TransformerException e) {
                                     e.printStackTrace();
@@ -159,14 +154,17 @@ public class XMLManager extends AbstractManager {
 
                             } else {
                                 response = responseForBadRequest("400 - The XSD does not exist");
+                                Tools.info("400 - The XSD does not exist");
                             }
 
                         } else {
                             response = responseForNotFound("404 - The XSLT asociated does not exist");
+                            Tools.info("404 - The XSLT asociated does not exist");
                         }
 
                     } else {
                         response = responseForNotFound("404 - The XML does not exist");
+                        Tools.info("404 - The XML does not exist");
                     }
 
                 } else {

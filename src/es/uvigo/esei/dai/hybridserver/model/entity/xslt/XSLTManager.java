@@ -1,7 +1,6 @@
 package es.uvigo.esei.dai.hybridserver.model.entity.xslt;
 
 import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
-import es.uvigo.esei.dai.hybridserver.controller.XSDController;
 import es.uvigo.esei.dai.hybridserver.controller.XSLTController;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 
@@ -20,15 +19,12 @@ import java.util.UUID;
 public class XSLTManager extends AbstractManager {
 
     private XSLTController xsltController;
-    private XSDController xsdController;
 
     public XSLTManager(ControllerFactory factory) {
         if (factory != null) {
-            this.xsdController = factory.createXSDController();
             this.xsltController = factory.createXSLTController();
         } else {
             this.xsltController = null;
-            this.xsdController = null;
         }
     }
 
@@ -135,7 +131,7 @@ public class XSLTManager extends AbstractManager {
 
             if (resourceParameters.containsKey("xslt") && resourceParameters.containsKey("xsd")) {
 
-                if ((xsd = this.xsdController.get(resourceParameters.get("xsd"))) != null) {
+                if ((xsd = this.xsltController.getXSD(resourceParameters.get("xsd"))) != null) {
 
                     content = resourceParameters.get("xslt");
                     this.xsltController.add(uuid, content, xsd.getUuid());

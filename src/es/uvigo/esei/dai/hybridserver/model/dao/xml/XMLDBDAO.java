@@ -42,6 +42,7 @@ public class XMLDBDAO implements XMLDAO {
                 if (result.next()) {
                     xml = new XML(result.getString("uuid"), result.getString("content"));
                 }
+                db.close();
             } catch (SQLException e) {
                 throw new RuntimeException("The XML could not be retrieved.");
 
@@ -63,6 +64,7 @@ public class XMLDBDAO implements XMLDAO {
 
             if (rows != 1)
                 throw new RuntimeException("The XML could not be added.");
+            db.close();
         } catch (SQLException e) {
             throw new RuntimeException("DB connection error" + e.getMessage());
         }
@@ -78,6 +80,7 @@ public class XMLDBDAO implements XMLDAO {
 
             if (rows != 1)
                 throw new RuntimeException("The XML could not be deleted.");
+            db.close();
         } catch (SQLException e) {
             throw new RuntimeException("DB connection error" + e.getMessage());
         }
@@ -95,6 +98,7 @@ public class XMLDBDAO implements XMLDAO {
                     XML xml = new XML(result.getString("uuid"), result.getString("content"));
                     xmlList.add(xml);
                 }
+                db.close();
 
             } catch (SQLException e) {
                 throw new RuntimeException("The XMLs could not be retrieved.");

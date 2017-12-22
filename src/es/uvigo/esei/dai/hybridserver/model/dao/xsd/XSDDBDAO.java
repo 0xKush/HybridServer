@@ -39,6 +39,7 @@ public class XSDDBDAO implements XSDDAO {
                 if (result.next()) {
                     xsd = new XSD(result.getString("uuid"), result.getString("content"));
                 }
+                db.close();
             } catch (SQLException e) {
                 throw new RuntimeException("The XSD could not be retrieved.");
 
@@ -60,6 +61,7 @@ public class XSDDBDAO implements XSDDAO {
 
             if (rows != 1)
                 throw new RuntimeException("The XSD could not be added.");
+            db.close();
         } catch (SQLException e) {
             throw new RuntimeException("DB connection error" + e.getMessage());
         }
@@ -75,6 +77,7 @@ public class XSDDBDAO implements XSDDAO {
 
             if (rows != 1)
                 throw new RuntimeException("The XSD could not be deleted.");
+            db.close();
         } catch (SQLException e) {
             throw new RuntimeException("DB connection error" + e.getMessage());
         }
@@ -92,6 +95,7 @@ public class XSDDBDAO implements XSDDAO {
                     XSD xsd = new XSD(result.getString("uuid"), result.getString("content"));
                     xsdList.add(xsd);
                 }
+                db.close();
 
             } catch (SQLException e) {
                 throw new RuntimeException("The XSDs could not be retrieved.");

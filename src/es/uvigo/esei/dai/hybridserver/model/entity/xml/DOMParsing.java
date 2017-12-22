@@ -22,6 +22,7 @@ import es.uvigo.esei.dai.hybridserver.model.entity.SimpleErrorHandler;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 public class DOMParsing {
 
@@ -46,18 +47,24 @@ public class DOMParsing {
     }
 
 
-    public static void validateWithXSD(XML xml, XSD xsd) throws SAXException, ParserConfigurationException, IOException {
+    public static boolean validateWithXSD(XML xml, XSD xsd) {
+        boolean validated = true;
 
-        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = factory.newSchema(new StreamSource(new StringReader(xsd.getContent())));
-        Validator validator = schema.newValidator();
+        try {
+            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = factory.newSchema(new StreamSource(new StringReader(xsd.getContent())));
+            Validator validator = schema.newValidator();
 
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        DocumentBuilder parser = dbf.newDocumentBuilder();
-        Document doc = parser.parse(new ByteArrayInputStream(xml.getContent().getBytes()));
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setNamespaceAware(true);
+            DocumentBuilder parser = dbf.newDocumentBuilder();
+            Document doc = parser.parse(new ByteArrayInputStream(xml.getContent().getBytes()));
 
-        validator.validate(new DOMSource(doc));
+            validator.validate(new DOMSource(doc));
+        } catch (SAXException | ParserConfigurationException | IOException e) {
+            validated = false;
+        }
+        return validated;
 
 
     }

@@ -41,6 +41,7 @@ public class HTMLDBDAO implements HTMLDAO {
                 if (result.next()) {
                     doc = new Document(result.getString("uuid"), result.getString("content"));
                 }
+                db.close();
             } catch (SQLException e) {
                 throw new RuntimeException("The page could not be retrieved.");
 
@@ -48,6 +49,7 @@ public class HTMLDBDAO implements HTMLDAO {
         } catch (SQLException e) {
             throw new RuntimeException("DB connection error" + e.getMessage());
         }
+
         return doc;
     }
 
@@ -63,6 +65,7 @@ public class HTMLDBDAO implements HTMLDAO {
 
             if (rows != 1)
                 throw new RuntimeException("The page could not be added.");
+            db.close();
         } catch (SQLException e) {
             throw new RuntimeException("DB connection error" + e.getMessage());
         }
@@ -80,6 +83,7 @@ public class HTMLDBDAO implements HTMLDAO {
 
             if (rows != 1)
                 throw new RuntimeException("The page could not be deleted.");
+            db.close();
         } catch (SQLException e) {
             throw new RuntimeException("DB connection error" + e.getMessage());
         }
@@ -100,6 +104,7 @@ public class HTMLDBDAO implements HTMLDAO {
                     documentList.add(doc);
                 }
 
+                db.close();
             } catch (SQLException e) {
                 throw new RuntimeException("The pages could not be retrieved.");
             }
@@ -107,6 +112,7 @@ public class HTMLDBDAO implements HTMLDAO {
         } catch (SQLException e) {
             throw new RuntimeException("DB connection error" + e.getMessage());
         }
+
         return documentList;
     }
 }

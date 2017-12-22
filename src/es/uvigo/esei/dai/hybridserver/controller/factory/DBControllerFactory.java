@@ -32,7 +32,7 @@ public class DBControllerFactory implements ControllerFactory {
 
     @Override
     public XMLController createXMLController() {
-        return new XMLController(new XMLDBDAO(this.configuration), this.ws);
+        return new XMLController(new XMLDBDAO(this.configuration), new XSLTDBDAO(this.configuration), new XSDDBDAO(this.configuration), this.ws);
     }
 
     @Override
@@ -42,6 +42,6 @@ public class DBControllerFactory implements ControllerFactory {
 
     @Override
     public XSLTController createXSLTController() {
-        return new XSLTController(new XSLTDBDAO(this.configuration), this.ws);
+        return new XSLTController(new XSLTDBDAO(this.configuration), new XSDDBDAO(this.configuration), this.ws);
     }
 }

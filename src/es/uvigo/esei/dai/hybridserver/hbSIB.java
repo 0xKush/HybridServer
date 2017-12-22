@@ -5,13 +5,11 @@ import es.uvigo.esei.dai.hybridserver.controller.XMLController;
 import es.uvigo.esei.dai.hybridserver.controller.XSDController;
 import es.uvigo.esei.dai.hybridserver.controller.XSLTController;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
-import es.uvigo.esei.dai.hybridserver.hbSEI;
 import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
 import es.uvigo.esei.dai.hybridserver.model.entity.xml.XML;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
 import es.uvigo.esei.dai.hybridserver.model.entity.xslt.XSLT;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.jws.WebService;
 
@@ -74,6 +72,6 @@ public class hbSIB implements hbSEI {
 
     @Override
     public XSD getAssociatedXSD(String uuid) {
-        return this.xsdController.getAssociatedXSD(this.xsltController.get(uuid).getXsd());
+        return this.xsdController.get(this.xsltController.get(uuid).getXsd());
     }
 }

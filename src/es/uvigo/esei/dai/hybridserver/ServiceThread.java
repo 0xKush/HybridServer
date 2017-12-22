@@ -2,10 +2,8 @@ package es.uvigo.esei.dai.hybridserver;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.List;
 import java.util.Map;
 
-import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.controller.factory.ControllerFactory;
 import es.uvigo.esei.dai.hybridserver.http.*;
 import es.uvigo.esei.dai.hybridserver.model.entity.AbstractManager;

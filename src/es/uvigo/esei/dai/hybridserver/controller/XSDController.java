@@ -43,24 +43,6 @@ public class XSDController {
         return doc;
     }
 
-    public XSD getAssociatedXSD(String uuid) {
-        XSD doc;
-        doc = dao.get(uuid);
-
-        if (doc != null) {
-            return doc;
-        } else {
-            if (!getWs().getRemoteServices().isEmpty()) {
-                for (Map.Entry<ServerConfiguration, hbSEI> server : getWs().getRemoteServices().entrySet()) {
-                    doc = server.getValue().getXSD(uuid);
-                    if (doc != null)
-                        break;
-                }
-            }
-        }
-        return doc;
-    }
-
     public List<XSD> list() {
         return dao.list();
     }

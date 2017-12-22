@@ -75,6 +75,7 @@ public class HybridServer {
         }
 
 
+        /*
         Tools.info("RUNNING" + "\n" +
                 "Port: " + servicePort + "\n" +
                 "numClients: " + numClients + "\n" +
@@ -82,7 +83,7 @@ public class HybridServer {
                 "dbUser: " + dbUser + "\n" +
                 "dbPass: " + dbPass);
 
-
+        */
         this.serverThread = new Thread() {
             @Override
             public void run() {
