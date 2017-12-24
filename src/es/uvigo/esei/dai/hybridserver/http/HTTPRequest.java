@@ -33,31 +33,30 @@ public class HTTPRequest {
 
             String line;
 
-            input = new BufferedReader(reader);
-            parseRequestLine(input.readLine());
+            this.input = new BufferedReader(reader);
+            this.parseRequestLine(input.readLine());
 
-            while (!((line = input.readLine()).equals("")))
-                parseHeaders(line);
+            while (!((line = this.input.readLine()).equals("")) && !(line.equals(null)))
+                this.parseHeaders(line);
 
             if (getContentLength() > 0) {
                 char[] contentArray = new char[getContentLength()];
-                input.read(contentArray);
-                content = new String(contentArray);
-                checkContentType();
+                this.input.read(contentArray);
+                this.content = new String(contentArray);
+                this.checkContentType();
             }
 
-            parseResourceParameters();
+            this.parseResourceParameters();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             throw new HTTPParseException("Error during the parse");
         }
     }
 
 
-    public void parseRequestLine(String requestLine) {
+    private void parseRequestLine(String requestLine) {
 
-       // Tools.info(requestLine);
         String[] aux = requestLine.split(" ");
 
         if (aux.length > 2) {
@@ -66,13 +65,15 @@ public class HTTPRequest {
             resourceChain = aux[1];
             httpVersion = aux[2];
             resourceName = aux[1].split("\\?")[0].substring(1);
-            resourcePath = parsePath(resourceName);
+
+            if (!resourceName.isEmpty())
+                resourcePath = resourceName.split("/");
         }
 
 
     }
 
-    public void parseHeaders(String headers) {
+    private void parseHeaders(String headers) {
 
         String[] kv = headers.split(":");
 
@@ -86,7 +87,7 @@ public class HTTPRequest {
     }
 
 
-    public void checkContentType() throws UnsupportedEncodingException {
+    private void checkContentType() throws UnsupportedEncodingException {
 
         String type;
 
@@ -98,7 +99,7 @@ public class HTTPRequest {
         }
     }
 
-    public void parseResourceParameters() {
+    private void parseResourceParameters() {
 
         String[] s_resourceParameters_array = {}, token1, token2;
 
@@ -132,17 +133,6 @@ public class HTTPRequest {
             if (kv.length > 1)
                 resourceParameters.put(kv[0], kv[1]);
         }
-    }
-
-
-    public String[] parsePath(String path) {
-
-        String[] toRet = {};
-
-        if (!path.isEmpty())
-            toRet = path.split("/");
-
-        return toRet;
     }
 
     public HTTPRequestMethod getMethod() {

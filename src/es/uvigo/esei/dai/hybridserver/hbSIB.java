@@ -72,6 +72,6 @@ public class hbSIB implements hbSEI {
 
     @Override
     public XSD getAssociatedXSD(String uuid) {
-        return this.xsdController.get(this.xsltController.get(uuid).getXsd());
+        return this.xmlController.getXSD(uuid);
     }
 }

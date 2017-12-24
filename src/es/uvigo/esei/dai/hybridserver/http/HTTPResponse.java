@@ -14,7 +14,6 @@ public class HTTPResponse {
 
     public HTTPResponse() {
         parameters = new HashMap<>();
-
     }
 
     public HTTPResponseStatus getStatus() {
@@ -78,33 +77,33 @@ public class HTTPResponse {
 
     public void print(Writer writer) throws IOException, NullPointerException {
 
-        String param;
-        Iterator<String> stringIterator = parameters.keySet().iterator();
-
         writer.write(this.getVersion());
 
-        if (this.getStatus() != null) {
+        if (this.getStatus() != null)
             writer.write(" " + this.getStatus().getCode() + " " + this.getStatus().getStatus());
-        }
 
-        if (stringIterator.hasNext()) {
+
+        String param;
+        Iterator<String> it = getParameters().keySet().iterator();
+
+        if (it.hasNext()) {
 
             writer.write("\r\n");
-            while (stringIterator.hasNext()) {
-                param = stringIterator.next();
-                writer.write(param + ": " + parameters.get(param) + "\r\n");
 
-                if (!stringIterator.hasNext()) {
+            while (it.hasNext()) {
+                param = it.next();
+                writer.write(param + ": " + getParameters().get(param) + "\r\n");
+
+                if (!it.hasNext())
                     writer.write("\r\n");
-                }
             }
-        } else {
-            writer.write("\r\n\r\n");
-        }
 
-        if (this.getContent() != null) {
+        } else
+            writer.write("\r\n\r\n");
+
+        if (this.getContent() != null)
             writer.write(this.getContent());
-        }
+
 
         writer.flush();
     }

@@ -144,7 +144,7 @@ public class XMLManager extends AbstractManager {
                             }
 
                         } else {
-                            response = S404("404 - The XSLT asociated does not exist");
+                            response = S404("404 - The XSLT associated does not exist");
                         }
 
                     } else {

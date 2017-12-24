@@ -60,7 +60,7 @@ public class XMLController {
         } else {
             if (!getWs().getRemoteServices().isEmpty()) {
                 for (Map.Entry<ServerConfiguration, hbSEI> server : getWs().getRemoteServices().entrySet()) {
-                    doc = server.getValue().getXSD(uuid);
+                    doc = server.getValue().getAssociatedXSD(uuid);
                     if (doc != null)
                         break;
                 }
