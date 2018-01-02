@@ -1,6 +1,6 @@
 package es.uvigo.esei.dai.hybridserver.controller;
 
-import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
+import es.uvigo.esei.dai.hybridserver.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.hbSEI;
 import es.uvigo.esei.dai.hybridserver.model.dao.xsd.XSDDAO;
 import es.uvigo.esei.dai.hybridserver.model.entity.wsManager;

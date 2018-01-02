@@ -1,11 +1,10 @@
 package es.uvigo.esei.dai.hybridserver.controller;
 
-import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
+import es.uvigo.esei.dai.hybridserver.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.hbSEI;
 import es.uvigo.esei.dai.hybridserver.model.dao.html.HTMLDAO;
 import es.uvigo.esei.dai.hybridserver.model.entity.html.Document;
 import es.uvigo.esei.dai.hybridserver.model.entity.wsManager;
-import es.uvigo.esei.dai.hybridserver.utils.Tools;
 
 import java.util.LinkedHashMap;
 import java.util.List;

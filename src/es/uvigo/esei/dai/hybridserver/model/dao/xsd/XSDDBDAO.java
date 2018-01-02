@@ -1,6 +1,6 @@
 package es.uvigo.esei.dai.hybridserver.model.dao.xsd;
 
-import es.uvigo.esei.dai.hybridserver.configuration.Configuration;
+import es.uvigo.esei.dai.hybridserver.Configuration;
 import es.uvigo.esei.dai.hybridserver.model.entity.xsd.XSD;
 
 import java.sql.*;

@@ -1,7 +1,5 @@
 package es.uvigo.esei.dai.hybridserver;
 
-import es.uvigo.esei.dai.hybridserver.configuration.Configuration;
-import es.uvigo.esei.dai.hybridserver.configuration.XMLConfigurationLoader;
 import es.uvigo.esei.dai.hybridserver.utils.Tools;
 
 import java.io.*;

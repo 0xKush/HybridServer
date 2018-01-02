@@ -1,6 +1,6 @@
 package es.uvigo.esei.dai.hybridserver.model.entity;
 
-import es.uvigo.esei.dai.hybridserver.configuration.ServerConfiguration;
+import es.uvigo.esei.dai.hybridserver.ServerConfiguration;
 import es.uvigo.esei.dai.hybridserver.hbSEI;
 
 import javax.xml.namespace.QName;

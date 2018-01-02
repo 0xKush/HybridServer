@@ -1,7 +1,7 @@
 HybridServer - Proyecto para la asignatura Desarrollo de Aplicaciones para Internet
 ===
 Curso 2017/2018 - E.S. Enxeñaría Informática (Universidade de Vigo)
-Primera Entrega
+Segunda Entrega
 
 Grupo 1.3
 ===
@@ -12,4 +12,4 @@ Grupo 1.3
 
 Repositorio
 ===
-**[https://github.com/0xKush/HybridServer](https://github.com/0xKush/HybridServer)**
+**[https://github.com/0xKush/hybridserver](https://github.com/0xKush/hybridserver)**
